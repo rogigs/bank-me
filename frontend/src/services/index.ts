@@ -1,3 +1,4 @@
+import { isUUID } from "@/assertions/isUUID";
 import { authenticatedFetch } from "./authenticatedFetch";
 
 type Auth = {
@@ -105,6 +106,8 @@ export const findManyAssignor = async ({
 
 export const findOnePayable = async (id: string) => {
   try {
+    isUUID(id);
+
     const response = await authenticatedFetch(
       `http://localhost:4000/v1/integrations/payable/${id}`,
       {
@@ -126,6 +129,8 @@ export const findOnePayable = async (id: string) => {
 
 export const deleteOnePayable = async (id: string) => {
   try {
+    isUUID(id);
+
     const response = await authenticatedFetch(
       `http://localhost:4000/v1/integrations/payable/${id}`,
       {
@@ -147,6 +152,8 @@ export const deleteOnePayable = async (id: string) => {
 
 export const findOneAssignor = async (assignorId: string) => {
   try {
+    isUUID(assignorId);
+
     const response = await authenticatedFetch(
       `http://localhost:4000/v1/integrations/assignor/${assignorId}`,
       {
@@ -190,6 +197,7 @@ export const createPayable = async (body: any) => {
 
 export const updatePayable = async (body: any, id: string) => {
   try {
+    isUUID(id);
     const response = await authenticatedFetch(
       `http://localhost:4000/v1/integrations/payable/${id}`,
       {
