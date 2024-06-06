@@ -1,10 +1,11 @@
 import {
-    CallHandler,
-    ExecutionContext,
-    Injectable,
-    NestInterceptor,
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
+
 import { map } from 'rxjs/operators';
 import { UserDto } from './dto/user.dto';
 

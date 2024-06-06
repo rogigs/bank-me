@@ -1,15 +1,21 @@
 import {
   Body,
   Controller,
+  Delete,
+  Get,
   HttpCode,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
+  Query,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { AuthGuard } from '../auth/auth.guard';
 import { CrudStrategyController } from '../crud-strategy/crud-strategy.controller';
 import {
   UserNoBaseModel,
@@ -18,7 +24,6 @@ import {
 import { UserInterceptor } from './user.interceptors';
 import { UserService } from './user.service';
 
-// Essas rotas não estão autenticadas para ser possível testar a autenticação
 @ApiTags('User')
 @Controller({ path: 'user', version: '1' })
 @UseInterceptors(UserInterceptor)
@@ -43,10 +48,45 @@ export class UserController extends CrudStrategyController<
 
   @Patch(':id')
   @ApiBody({ type: UserNoBaseModelDto })
+  @UseGuards(AuthGuard)
   async update(
     @Param('id') id: string,
     @Body() updateDto: UserNoBaseModel,
   ): Promise<User> {
     return await this.userService.update(id, updateDto);
+  }
+
+  @Get()
+  @ApiQuery({
+    name: 'page',
+    required: true,
+    type: Number,
+    description: 'Número da página',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: true,
+    type: Number,
+    description: 'Quantidade de itens por página',
+  })
+  @UseGuards(AuthGuard)
+  async findAll(
+    @Query('page', ParseIntPipe) page = 1,
+    @Query('limit', ParseIntPipe) limit = 10,
+  ): Promise<User[]> {
+    const skip = (page - 1) * limit;
+    return await this.userService.findMany({ skip, take: limit });
+  }
+
+  @Get(':id')
+  @UseGuards(AuthGuard)
+  async findOne(@Param('id') id: string): Promise<User> {
+    return await this.userService.findOne(id);
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard)
+  async remove(@Param('id') id: string): Promise<User> {
+    return await this.userService.remove(id);
   }
 }
