@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
+import { QueryParams } from 'src/types/query-params';
 
 type PrismaQuery = {
   where: Prisma.UserWhereUniqueInput | Prisma.UserWhereInput;
@@ -13,6 +14,15 @@ export class CrudStrategyService<T, C, U> {
     private readonly model: Prisma.ModelName,
   ) {}
 
+  private buildPrismaQuery(query: unknown) {
+    return {
+      where: Object.entries(query).reduce((acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      }, {}) as PrismaQuery,
+    };
+  }
+
   async create(data: C, req?): Promise<T> {
     return await this.prisma[this.model].create({ data });
   }
@@ -21,22 +31,16 @@ export class CrudStrategyService<T, C, U> {
     return await this.prisma[this.model].findMany({ skip, take });
   }
 
-  async findOne(query: PrismaQuery | string): Promise<T> {
-    // TODO: Should extensible for new queries and closed to changes
-    const findById = typeof query === 'string';
-    const data = await this.prisma[this.model].findUnique(
-      findById
-        ? {
-            where: { id: query },
-          }
-        : query,
+  async findOne(query: QueryParams<unknown>): Promise<T> {
+    return await this.prisma[this.model].findUnique(
+      this.buildPrismaQuery(query),
     );
+  }
 
-    if (!data) {
-      throw new NotFoundException(`${this.model} not found`);
-    }
-
-    return data;
+  async findOneById(id: string): Promise<T> {
+    return await this.prisma[this.model].findUnique({
+      where: { id: id },
+    });
   }
 
   async update(id: string, data: U): Promise<T> {

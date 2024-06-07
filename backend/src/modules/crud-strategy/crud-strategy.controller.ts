@@ -7,6 +7,7 @@ import {
   HttpCode,
   Param,
   ParseIntPipe,
+  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -38,7 +39,7 @@ export class CrudStrategyController<T, C, U> {
     type: Number,
     description: 'Quantidade de itens por página',
   })
-  async findAll(
+  async findMany(
     @Query('page', ParseIntPipe) page = 1,
     @Query('limit', ParseIntPipe) limit = 10,
   ): Promise<T[]> {
@@ -46,9 +47,23 @@ export class CrudStrategyController<T, C, U> {
     return await this.baseCrudService.findMany({ skip, take: limit });
   }
 
+  @ApiQuery({
+    name: 'query',
+    required: false,
+    description:
+      'Parâmetros de consulta dinâmicos (enviar como um objeto JSON)',
+    schema: {
+      type: 'object',
+    },
+  })
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<T> {
-    return await this.baseCrudService.findOne(id);
+  async findOne(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query() query: unknown,
+  ): Promise<T> {
+    return query
+      ? await this.baseCrudService.findOneById(id)
+      : await this.baseCrudService.findOne({ id, query });
   }
 
   @Patch(':id')

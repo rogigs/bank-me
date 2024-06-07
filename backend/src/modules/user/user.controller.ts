@@ -6,6 +6,7 @@ import {
   HttpCode,
   Param,
   ParseIntPipe,
+  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -15,6 +16,7 @@ import {
 import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { QueryParams } from 'src/types/query-params';
 import { AuthGuard } from '../auth/auth.guard';
 import { CrudStrategyController } from '../crud-strategy/crud-strategy.controller';
 import {
@@ -78,10 +80,44 @@ export class UserController extends CrudStrategyController<
     return await this.userService.findMany({ skip, take: limit });
   }
 
+  @ApiQuery({
+    name: 'page',
+    required: true,
+    type: Number,
+    description: 'Número da página',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: true,
+    type: Number,
+    description: 'Quantidade de itens por página',
+  })
+  @Get()
+  async findMany(
+    @Query('page', ParseIntPipe) page = 1,
+    @Query('limit', ParseIntPipe) limit = 10,
+  ): Promise<User[]> {
+    const skip = (page - 1) * limit;
+    return await this.userService.findMany({ skip, take: limit });
+  }
+
+  @ApiQuery({
+    name: 'query',
+    required: false,
+    description:
+      'Parâmetros de consulta dinâmicos (enviar como um objeto JSON)',
+    schema: {
+      type: 'object',
+    },
+  })
   @Get(':id')
-  @UseGuards(AuthGuard)
-  async findOne(@Param('id') id: string): Promise<User> {
-    return await this.userService.findOne(id);
+  async findOne(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query() query: QueryParams<unknown>,
+  ): Promise<User> {
+    return query
+      ? await this.userService.findOne({ id, ...query })
+      : await this.userService.findOneById(id);
   }
 
   @Delete(':id')

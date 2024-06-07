@@ -34,7 +34,7 @@ export class PayableService extends CrudStrategyService<
   }
 
   async create(data: Omit<PayableDto, 'id'>): Promise<Payable> {
-    await this.assignorService.findOne(data.assignorId);
+    await this.assignorService.findOneById(data.assignorId);
 
     const payable = await this.refPrisma.payable.create({
       data,
