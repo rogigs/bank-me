@@ -45,9 +45,11 @@ export class PayableService extends CrudStrategyService<
 
   async createMany(
     data: Omit<PayableDto, 'id'>[],
+    user?: string,
   ): Promise<Bull.Job<string | null>> {
     return this.queue.add('createPayable', {
       data,
+      user,
     });
   }
 }

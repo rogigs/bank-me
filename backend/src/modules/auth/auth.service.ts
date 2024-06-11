@@ -13,7 +13,7 @@ export class AuthService {
 
   async signIn(data: Omit<UserDto, 'id'>): Promise<{ access_token: string }> {
     const user = await this.userService.findOne({
-      where: { login: data.login },
+      where: { email: data.email },
     });
 
     if (!(await bcrypt.compare(data.password, user.password))) {
@@ -23,7 +23,7 @@ export class AuthService {
     return {
       access_token: await this.jwtService.signAsync({
         id: user.id,
-        login: user.login,
+        email: user.email,
       }),
     };
   }

@@ -6,6 +6,7 @@ import { ResponseInterceptor } from './app.interceptors';
 import { AppService } from './app.service';
 import { AssignorModule } from './modules/assignor/assignor.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { EmailModule } from './modules/email/email.module';
 import { PayableModule } from './modules/payable/payable.module';
 import { UserModule } from './modules/user/user.module';
 
@@ -21,6 +22,7 @@ import { UserModule } from './modules/user/user.module';
     AssignorModule,
     AuthModule,
     UserModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [

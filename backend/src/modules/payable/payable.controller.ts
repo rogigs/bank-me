@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
@@ -45,9 +46,10 @@ export class PayableController extends CrudStrategyController<
   @HttpCode(201)
   async createMany(
     @Body() createDto: PayableNoBaseModel[],
+    @Req() req,
   ): Promise<Bull.Job<string | null>> {
     if (createDto.length > 10) {
-      this.payableService.createMany(createDto);
+      this.payableService.createMany(createDto, req.user);
 
       return 'It will be send a email notification' as any;
     }

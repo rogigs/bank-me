@@ -6,17 +6,25 @@ import {
 } from '@nestjs/bull';
 import { Payable } from '@prisma/client';
 import { Job } from 'bull';
+import { EmailService } from './../email/email.service';
+import { UserService } from './../user/user.service';
 import { PayableDto } from './dto/payable.dto';
 import { PayableService } from './payable.service';
 
 @Processor('payable')
 export class PayableProcessor {
-  constructor(private readonly payableService: PayableService) {}
+  constructor(
+    private readonly payableService: PayableService,
+    private readonly emailService: EmailService,
+    private readonly userService: UserService,
+  ) {}
 
   @Process('createPayable')
-  async handleCreatePayable(job: Job<{ data: Omit<PayableDto, 'id'>[] }>) {
+  async handleCreatePayable(
+    job: Job<{ data: Omit<PayableDto, 'id'>[]; user: string | undefined }>,
+  ) {
     try {
-      const { data } = job.data;
+      const { data, user } = job.data;
 
       if (data.length > 10000) {
         throw new Error('Exceeded the maximum allowed');
@@ -30,11 +38,16 @@ export class PayableProcessor {
         return 'Successful';
       }
 
-      // return await this.mailerService.sendMail({
-      //   to: user.email,
-      //   subject: 'Payable Processing Complete',
-      //   text: `Yours Payable are saved successfully`,
-      // });
+      if (user) {
+        this.emailService.sendMail({
+          to: (await this.userService.findOneById(user)).email,
+          subject: 'Pagavéis processados com successo',
+          message:
+            'Seus pagavéis foram processados com sucesso, você já pode vê-los no seu perfil.',
+        });
+
+        return;
+      }
     } catch (error) {
       if (job.attemptsMade < 4) {
         await job.retry();
@@ -43,17 +56,9 @@ export class PayableProcessor {
       }
 
       await job.moveToFailed({ message: error.message }, true);
-      await this.sendEmailToOperations(job.data);
+
+      // TODO: add agregator to send just one failed email notification
     }
-  }
-  async sendEmailToOperations(data: { data: Omit<PayableDto, 'id'>[] }) {
-    console.log('🚀 ~ PayableProcessor ~ sendEmailToOperations ~ data:', data);
-    // Fake service email
-    // await this.mailerService.sendMail({
-    //   to: 'operations@example.com',
-    //   subject: 'Payable Processing Failure',
-    //   text: `Payable processing failed after maximum attempts for data: ${JSON.stringify(data)}`,
-    // });
   }
 
   @OnQueueFailed()
