@@ -8,6 +8,7 @@ import { Payable } from '@prisma/client';
 import { Job } from 'bull';
 import { EmailService } from './../email/email.service';
 import { UserService } from './../user/user.service';
+import { PayableNoBaseModel } from './dto/payable-no-base-model.dto';
 import { PayableDto } from './dto/payable.dto';
 import { PayableService } from './payable.service';
 
@@ -21,7 +22,7 @@ export class PayableProcessor {
 
   @Process('createPayable')
   async handleCreatePayable(
-    job: Job<{ data: Omit<PayableDto, 'id'>[]; user: string | undefined }>,
+    job: Job<{ data: PayableNoBaseModel[]; user: string | undefined }>,
   ) {
     try {
       const { data, user } = job.data;

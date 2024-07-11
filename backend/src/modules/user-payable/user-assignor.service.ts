@@ -8,7 +8,7 @@ import { UserAssignorDto } from './dto/user-assignor.dto';
 export class UserAssignorService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: Omit<UserAssignorDto, 'id'>) {
+  async create(data: UserAssignorDto) {
     return await this.prisma.userAssignor.create({ data });
   }
 }

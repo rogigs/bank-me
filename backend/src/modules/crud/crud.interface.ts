@@ -1,5 +1,5 @@
 import { Pagination } from 'src/types/pagination.type';
-import { QueryParams } from 'src/types/query-params';
+import { QueryParams } from 'src/types/query-params.type';
 
 export interface CRUDRepository<T, C, U> {
   create(data: C): Promise<T>;

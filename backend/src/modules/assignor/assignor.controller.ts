@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { Assignor } from '@prisma/client';
-import { JwtPayload } from 'src/types/jwt-payload.types';
+import { JwtPayload } from 'src/types/jwt-payload.type';
 import { AuthGuard } from '../auth/auth.guard';
 import { CrudStrategyController } from '../crud/crud.controller';
 import { AssignorService } from './assignor.service';

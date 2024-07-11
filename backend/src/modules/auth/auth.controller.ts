@@ -1,8 +1,10 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { JwtPayload } from 'src/types/jwt-payload.types';
-import { UserNoBaseModelDto } from '../user/dto/user-no-base-model.dto';
-import { UserDto } from '../user/dto/user.dto';
+import { JwtPayload } from 'src/types/jwt-payload.type';
+import {
+  UserNoBaseModel,
+  UserNoBaseModelDto,
+} from '../user/dto/user-no-base-model.dto';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 
@@ -13,7 +15,7 @@ export class AuthController {
 
   @Post()
   @ApiBody({ type: UserNoBaseModelDto })
-  signIn(@Body() signInDto: Omit<UserDto, 'id'>) {
+  signIn(@Body() signInDto: UserNoBaseModel) {
     return this.authService.signIn(signInDto);
   }
 

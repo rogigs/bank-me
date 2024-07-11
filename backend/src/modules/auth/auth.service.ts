@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UserDto } from '../user/dto/user.dto';
+import { UserNoBaseModel } from '../user/dto/user-no-base-model.dto';
 import { UserService } from '../user/user.service';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(data: Omit<UserDto, 'id'>): Promise<{ access_token: string }> {
+  async signIn(data: UserNoBaseModel): Promise<{ access_token: string }> {
     const user = await this.userService.findOne({
       where: { email: data.email },
     });

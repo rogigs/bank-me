@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { Pagination } from 'src/types/pagination.type';
-import { QueryParams } from 'src/types/query-params';
+import { QueryParams } from 'src/types/query-params.type';
 import { CRUDRepository } from './crud.interface';
 
 type PrismaQuery = {
