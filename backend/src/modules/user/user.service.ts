@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 
 import { User } from '@prisma/client';
 import { PrismaService } from 'src/config/prisma.service';
-import { CrudStrategyService } from '../crud-strategy/crud-strategy.service';
-import { UserDto } from './dto/user.dto';
+import { CRUDServiceRepository } from '../crud/crud.service';
+import { UserNoBaseModel } from './dto/user-no-base-model.dto';
 
 @Injectable()
-export class UserService extends CrudStrategyService<
+export class UserService extends CRUDServiceRepository<
   User,
-  Omit<UserDto, 'id'>,
-  Omit<UserDto, 'id'>
+  UserNoBaseModel,
+  UserNoBaseModel
 > {
   constructor(prisma: PrismaService) {
     super(prisma, 'User');

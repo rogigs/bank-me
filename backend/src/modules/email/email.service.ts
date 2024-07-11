@@ -8,7 +8,7 @@ export class EmailService {
 
   sendMail(email: EmailDto) {
     this.mailService.sendMail({
-      from: 'demomailtrap.com',
+      from: process.env.EMAIL_DELIVERY,
       to: email.to,
       subject: email.subject,
       text: email.message,

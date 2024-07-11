@@ -2,15 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { Assignor } from '@prisma/client';
 import { PrismaService } from 'src/config/prisma.service';
 import { JwtPayload } from 'src/types/jwt-payload.types';
-import { CrudStrategyService } from '../crud-strategy/crud-strategy.service';
+import { CRUDServiceRepository } from '../crud/crud.service';
 import { UserAssignorService } from './../user-payable/user-assignor.service';
-import { AssignorDto } from './dto/assignor.dto';
 
 @Injectable()
-export class AssignorService extends CrudStrategyService<
+export class AssignorService extends CRUDServiceRepository<
   Assignor,
-  Omit<AssignorDto, 'id'>,
-  Omit<AssignorDto, 'id'>
+  Omit<Assignor, 'id'>,
+  Omit<Assignor, 'id'>
 > {
   private readonly refPrisma!: PrismaService;
 
@@ -22,18 +21,25 @@ export class AssignorService extends CrudStrategyService<
     this.refPrisma = prisma;
   }
 
-  async create(
-    data: Omit<AssignorDto, 'id'>,
+  public async create(data: Omit<Assignor, 'id'>): Promise<Assignor>;
+  public async create(
+    data: Omit<Assignor, 'id'>,
     user: JwtPayload,
+  ): Promise<Assignor>;
+  public async create(
+    data: Omit<Assignor, 'id'>,
+    user?: JwtPayload,
   ): Promise<Assignor> {
     const assignor = await this.refPrisma.assignor.create({
       data,
     });
 
-    await this.userAssignorService.create({
-      assignorId: assignor.id,
-      userId: user.id,
-    });
+    if (user) {
+      await this.userAssignorService.create({
+        assignorId: assignor.id,
+        userId: user.id,
+      });
+    }
 
     return assignor;
   }

@@ -12,7 +12,7 @@ import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { Payable } from '@prisma/client';
 import Bull from 'bull';
 import { AuthGuard } from '../auth/auth.guard';
-import { CrudStrategyController } from '../crud-strategy/crud-strategy.controller';
+import { CrudStrategyController } from '../crud/crud.controller';
 import {
   PayableNoBaseModel,
   PayableNoBaseModelDto,

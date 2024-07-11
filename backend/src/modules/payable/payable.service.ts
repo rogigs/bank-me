@@ -3,14 +3,14 @@ import { Injectable } from '@nestjs/common';
 import { Payable } from '@prisma/client';
 import Bull, { Queue } from 'bull';
 import { PrismaService } from 'src/config/prisma.service';
-import { CrudStrategyService } from '../crud-strategy/crud-strategy.service';
+import { CRUDServiceRepository } from '../crud/crud.service';
 import { AssignorService } from './../assignor/assignor.service';
 import { PayableDto } from './dto/payable.dto';
 @Injectable()
-export class PayableService extends CrudStrategyService<
+export class PayableService extends CRUDServiceRepository<
   Payable,
-  Omit<PayableDto, 'id'>,
-  Omit<PayableDto, 'id'>
+  Omit<Payable, 'id'>,
+  Omit<Payable, 'id'>
 > {
   private result: Payable | null = null;
   private readonly refPrisma!: PrismaService;
@@ -18,7 +18,6 @@ export class PayableService extends CrudStrategyService<
   constructor(
     @InjectQueue('payable') private queue: Queue,
     private readonly assignorService: AssignorService,
-
     prisma: PrismaService,
   ) {
     super(prisma, 'Payable');

@@ -18,7 +18,7 @@ import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { QueryParams } from 'src/types/query-params';
 import { AuthGuard } from '../auth/auth.guard';
-import { CrudStrategyController } from '../crud-strategy/crud-strategy.controller';
+import { CrudStrategyController } from '../crud/crud.controller';
 import {
   UserNoBaseModel,
   UserNoBaseModelDto,

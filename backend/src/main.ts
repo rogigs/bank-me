@@ -30,5 +30,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/v1', app, document);
 
   await app.listen(4000);
+
+  console.log('\x1b[36m%s\x1b[0m', 'App is listening in port 4000 🏃🏃🏃🏃🏃');
 }
 bootstrap();

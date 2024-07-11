@@ -14,15 +14,17 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
-import { CrudStrategyService } from './crud-strategy.service';
+import { CRUDServiceRepository } from './crud.service';
 
 @Controller()
 export class CrudStrategyController<T, C, U> {
-  constructor(private readonly baseCrudService: CrudStrategyService<T, C, U>) {}
+  constructor(
+    private readonly baseCrudService: CRUDServiceRepository<T, C, U>,
+  ) {}
 
   @HttpCode(201)
   @Post()
-  async create(@Body() createDto: C, @Req() req?): Promise<T> {
+  async create(@Body() createDto, @Req() req): Promise<T> {
     return await this.baseCrudService.create(createDto);
   }
 
