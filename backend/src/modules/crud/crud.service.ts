@@ -4,12 +4,10 @@ import { Pagination } from 'src/types/pagination.type';
 import { QueryParams } from 'src/types/query-params.type';
 import { CRUDRepository } from './crud.interface';
 
-type PrismaQuery = {
-  where: Prisma.UserWhereUniqueInput | Prisma.UserWhereInput;
-};
-
 @Injectable()
-export class CRUDServiceRepository<T, C, U> implements CRUDRepository<T, C, U> {
+export abstract class CRUDServiceRepository<T, C, U>
+  implements CRUDRepository<T, C, U>
+{
   constructor(
     private readonly prisma: PrismaClient,
     private readonly model: Prisma.ModelName,
@@ -44,14 +42,5 @@ export class CRUDServiceRepository<T, C, U> implements CRUDRepository<T, C, U> {
     return await this.prisma[this.model].delete({
       where: { id },
     });
-  }
-
-  private buildPrismaQuery(query: unknown) {
-    return {
-      where: Object.entries(query).reduce((acc, [key, value]) => {
-        acc[key] = value;
-        return acc;
-      }, {}) as PrismaQuery,
-    };
   }
 }

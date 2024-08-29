@@ -16,8 +16,10 @@ import {
 import { ApiQuery } from '@nestjs/swagger';
 import { CRUDServiceRepository } from './crud.service';
 
+// TODO: fix architecture
+// TODO: Should have a interface
 @Controller()
-export class CrudStrategyController<T, C, U> {
+export abstract class CrudStrategyController<T, C, U> {
   constructor(
     private readonly baseCrudService: CRUDServiceRepository<T, C, U>,
   ) {}

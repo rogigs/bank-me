@@ -14,7 +14,7 @@ export class AssignorService extends CRUDServiceRepository<
 > {
   constructor(
     prisma: PrismaService,
-    readonly userAssignorService: UserAssignorService,
+    private readonly userAssignorService: UserAssignorService,
   ) {
     super(prisma, 'Assignor');
   }
