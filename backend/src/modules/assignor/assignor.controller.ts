@@ -37,7 +37,7 @@ export class AssignorController extends CrudStrategyController<
   @HttpCode(201)
   async create(
     @Body() createDto: AssignorNoBaseModel,
-    @Req() req: JwtPayload,
+    @Req() req?: Request & JwtPayload,
   ): Promise<Assignor> {
     return await this.assignorService.create(createDto, req);
   }

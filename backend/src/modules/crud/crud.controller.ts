@@ -7,26 +7,28 @@ import {
   HttpCode,
   Param,
   ParseIntPipe,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
-  Req,
 } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
+import { QueryParams } from 'src/types/query-params.type';
+import { CRUDController } from './crud.interface';
 import { CRUDServiceRepository } from './crud.service';
 
 // TODO: fix architecture
 // TODO: Should have a interface
 @Controller()
-export abstract class CrudStrategyController<T, C, U> {
+export abstract class CrudStrategyController<T, C, U>
+  implements CRUDController<T, C, U>
+{
   constructor(
     private readonly baseCrudService: CRUDServiceRepository<T, C, U>,
   ) {}
 
   @HttpCode(201)
   @Post()
-  async create(@Body() createDto, @Req() req): Promise<T> {
+  async create(@Body() createDto): Promise<T> {
     return await this.baseCrudService.create(createDto);
   }
 
@@ -62,8 +64,8 @@ export abstract class CrudStrategyController<T, C, U> {
   })
   @Get(':id')
   async findOne(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Query() query: unknown,
+    @Param('id') id: string | undefined,
+    @Query() query: QueryParams<unknown>,
   ): Promise<T> {
     return query
       ? await this.baseCrudService.findOneById(id)

@@ -19,9 +19,15 @@ export class AssignorService extends CRUDServiceRepository<
     super(prisma, 'Assignor');
   }
 
+  async create(data: AssignorNoBaseModel): Promise<Assignor>;
   async create(
     data: AssignorNoBaseModel,
-    user?: JwtPayload,
+    user: Request & JwtPayload,
+  ): Promise<Assignor>;
+
+  async create(
+    data: AssignorNoBaseModel,
+    user?: Request & JwtPayload,
   ): Promise<Assignor> {
     const assignor = await super.create(data);
 
