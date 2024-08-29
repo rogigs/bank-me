@@ -12,28 +12,18 @@ export class AssignorService extends CRUDServiceRepository<
   AssignorNoBaseModel,
   AssignorNoBaseModel
 > {
-  private readonly refPrisma!: PrismaService;
-
   constructor(
     prisma: PrismaService,
     readonly userAssignorService: UserAssignorService,
   ) {
     super(prisma, 'Assignor');
-    this.refPrisma = prisma;
   }
 
-  public async create(data: AssignorNoBaseModel): Promise<Assignor>;
-  public async create(
-    data: AssignorNoBaseModel,
-    user: JwtPayload,
-  ): Promise<Assignor>;
-  public async create(
+  async create(
     data: AssignorNoBaseModel,
     user?: JwtPayload,
   ): Promise<Assignor> {
-    const assignor = await this.refPrisma.assignor.create({
-      data,
-    });
+    const assignor = await super.create(data);
 
     if (user) {
       await this.userAssignorService.create({

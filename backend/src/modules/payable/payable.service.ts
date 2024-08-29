@@ -7,6 +7,7 @@ import { CRUDServiceRepository } from '../crud/crud.service';
 import { AssignorService } from './../assignor/assignor.service';
 import { PayableNoBaseModel } from './dto/payable-no-base-model.dto';
 import { PayableDto } from './dto/payable.dto';
+
 @Injectable()
 export class PayableService extends CRUDServiceRepository<
   Payable,
@@ -14,7 +15,6 @@ export class PayableService extends CRUDServiceRepository<
   PayableNoBaseModel
 > {
   private result: Payable | null = null;
-  private readonly refPrisma!: PrismaService;
 
   constructor(
     @InjectQueue('payable') private queue: Queue,
@@ -22,7 +22,6 @@ export class PayableService extends CRUDServiceRepository<
     prisma: PrismaService,
   ) {
     super(prisma, 'Payable');
-    this.refPrisma = prisma;
   }
 
   setResult(result: Payable): void {
@@ -36,11 +35,7 @@ export class PayableService extends CRUDServiceRepository<
   async create(data: PayableNoBaseModel): Promise<Payable> {
     await this.assignorService.findOneById(data.assignorId);
 
-    const payable = await this.refPrisma.payable.create({
-      data,
-    });
-
-    return payable;
+    return super.create(data);
   }
 
   async createMany(
