@@ -29,12 +29,12 @@ export const FormLogin = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-12 w-1/2 h-full"
+      className="flex flex-col gap-12 h-full w-full md:w-1/2"
     >
-      <p className="text-6xl text-end mb-32">
+      <h1 className="text-6xl text-end break-words">
         <span className="font-bold text-primary">Bankme</span> o seu banco
         preferido!
-      </p>
+      </h1>
 
       <FormField
         title="Login"
@@ -50,11 +50,15 @@ export const FormLogin = () => {
         error={errors}
       />
 
-      <div className="flex items-center justify-between">
-        <a href="#" className="text-2xl text-primary-dark underline">
+      <div className="flex flex-col gap-y-4 justify-between md:flex-row md:items-center ">
+        <a
+          href="#"
+          className="text-2xl text-primary-dark underline"
+          aria-label="Esqueceu sua senha? Clique para recuperar."
+        >
           Esqueceu sua senha?
         </a>
-        <div className="w-1/3">
+        <div className="w-full md:w-1/3">
           <Button type="submit">Logar</Button>
         </div>
       </div>
