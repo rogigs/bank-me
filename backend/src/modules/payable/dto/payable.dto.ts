@@ -6,9 +6,9 @@ import {
   IsPositive,
   IsUUID,
 } from 'class-validator';
-import { BaseModel } from 'src/models/baseModel.dto';
+import { BaseModel } from 'src/models/baseModel.DTO';
 
-export class PayableDto extends BaseModel {
+export class PayableDTO extends BaseModel {
   @IsNumber()
   @IsNotEmpty({ message: 'value must not be empty' })
   @IsPositive()

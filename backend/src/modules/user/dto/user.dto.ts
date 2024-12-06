@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { BaseModel } from 'src/models/baseModel.dto';
+import { BaseModel } from 'src/models/baseModel.DTO';
 
-export class UserDto extends BaseModel {
+export class UserDTO extends BaseModel {
   @IsString()
   @IsEmail()
   @IsNotEmpty({ message: 'email must not be empty' })

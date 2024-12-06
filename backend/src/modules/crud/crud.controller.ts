@@ -19,12 +19,10 @@ import { CRUDController } from './crud.interface';
 import { CRUDServiceRepository } from './crud.service';
 
 @Controller()
-export abstract class CrudStrategyController<T, C, U>
-  implements CRUDController<T, C, U>
+export abstract class CrudStrategyController<T, C>
+  implements CRUDController<T, C>
 {
-  constructor(
-    private readonly baseCrudService: CRUDServiceRepository<T, C, U>,
-  ) {}
+  constructor(private readonly baseCrudService: CRUDServiceRepository<T, C>) {}
 
   public validateResult(result: T | T[] | Error | null): T | T[] {
     if (result instanceof Error) {
@@ -42,8 +40,8 @@ export abstract class CrudStrategyController<T, C, U>
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Post()
-  async create(@Body() createDto: C): Promise<void> {
-    const result = await this.baseCrudService.create(createDto);
+  async create(@Body() createDTO: C): Promise<void> {
+    const result = await this.baseCrudService.create(createDTO);
     this.validateResult(result);
   }
 
@@ -92,8 +90,8 @@ export abstract class CrudStrategyController<T, C, U>
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateDto: U): Promise<T> {
-    const result = await this.baseCrudService.update(id, updateDto);
+  async update(@Param('id') id: string, @Body() updateDTO: C): Promise<T> {
+    const result = await this.baseCrudService.update(id, updateDTO);
     return this.validateResult(result) as T;
   }
 

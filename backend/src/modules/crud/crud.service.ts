@@ -5,8 +5,8 @@ import { QueryParams } from 'src/types/query-params.type';
 import { CRUDRepository } from './crud.interface';
 
 @Injectable()
-export abstract class CRUDServiceRepository<T, C, U>
-  implements CRUDRepository<T, C, U>
+export abstract class CRUDServiceRepository<T, C>
+  implements CRUDRepository<T, C>
 {
   constructor(
     private readonly prisma: PrismaClient,
@@ -64,7 +64,7 @@ export abstract class CRUDServiceRepository<T, C, U>
     }
   }
 
-  public async update(id: string, data: U): Promise<T | Error> {
+  public async update(id: string, data: C): Promise<T | Error> {
     try {
       if (!id || !data) throw new Error('ID or data is missing for update.');
 

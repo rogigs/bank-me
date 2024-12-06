@@ -6,13 +6,12 @@ import { PrismaService } from 'src/config/prisma.service';
 import { JwtPayload } from 'src/types/jwt-payload.type';
 import { CRUDServiceRepository } from '../crud/crud.service';
 import { AssignorService } from './../assignor/assignor.service';
-import { PayableNoBaseModel } from './dto/payable-no-base-model.dto';
-import { PayableDto } from './dto/payable.dto';
+import { PayableNoBaseModel } from './DTO/payable-no-base-model.DTO';
+import { PayableDTO } from './DTO/payable.DTO';
 
 @Injectable()
 export class PayableService extends CRUDServiceRepository<
   Payable,
-  PayableNoBaseModel,
   PayableNoBaseModel
 > {
   private result: Payable | null = null;
@@ -29,7 +28,7 @@ export class PayableService extends CRUDServiceRepository<
     this.result = result;
   }
 
-  getResult(): PayableDto | null {
+  getResult(): PayableDTO | null {
     return this.result;
   }
 

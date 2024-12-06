@@ -9,8 +9,8 @@ import { Job } from 'bull';
 import { JwtPayload } from 'src/types/jwt-payload.type';
 import { EmailService } from './../email/email.service';
 import { UserService } from './../user/user.service';
-import { PayableNoBaseModel } from './dto/payable-no-base-model.dto';
-import { PayableDto } from './dto/payable.dto';
+import { PayableNoBaseModel } from './DTO/payable-no-base-model.DTO';
+import { PayableDTO } from './DTO/payable.DTO';
 import { PayableService } from './payable.service';
 
 type ParamsCreateMany = {
@@ -68,7 +68,7 @@ export class PayableProcessor {
   }
 
   @OnQueueFailed()
-  async handleFailedJob(job: Job<PayableDto>, error: Error) {
+  async handleFailedJob(job: Job<PayableDTO>, error: Error) {
     return error.message;
   }
 

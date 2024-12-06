@@ -1,6 +1,6 @@
 import { OmitType } from '@nestjs/swagger';
-import { UserDto } from './user.dto';
+import { UserDTO } from './user.DTO';
 
-export class UserNoBaseModelDto extends OmitType(UserDto, ['id'] as const) {}
+export class UserNoBaseModelDTO extends OmitType(UserDTO, ['id'] as const) {}
 
-export type UserNoBaseModel = Omit<UserDto, 'id'>;
+export type UserNoBaseModel = Omit<UserDTO, 'id'>;

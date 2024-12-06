@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UserNoBaseModel } from '../user/dto/user-no-base-model.dto';
+import { UserNoBaseModel } from '../user/DTO/user-no-base-model.DTO';
 import { UserService } from '../user/user.service';
 import { AuthResponse } from './auth.type';
 

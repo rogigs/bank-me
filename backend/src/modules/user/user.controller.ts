@@ -21,8 +21,8 @@ import { AuthGuard } from '../auth/auth.guard';
 import { CrudStrategyController } from '../crud/crud.controller';
 import {
   UserNoBaseModel,
-  UserNoBaseModelDto,
-} from './dto/user-no-base-model.dto';
+  UserNoBaseModelDTO,
+} from './DTO/user-no-base-model.DTO';
 import { UserInterceptor } from './user.interceptors';
 import { UserService } from './user.service';
 
@@ -31,7 +31,6 @@ import { UserService } from './user.service';
 @UseInterceptors(UserInterceptor)
 export class UserController extends CrudStrategyController<
   User,
-  UserNoBaseModel,
   UserNoBaseModel
 > {
   constructor(public readonly userService: UserService) {
@@ -39,23 +38,23 @@ export class UserController extends CrudStrategyController<
   }
 
   @Post()
-  @ApiBody({ type: UserNoBaseModelDto })
+  @ApiBody({ type: UserNoBaseModelDTO })
   @HttpCode(201)
-  async create(@Body() createDto: UserNoBaseModel): Promise<void> {
+  async create(@Body() createDTO: UserNoBaseModel): Promise<void> {
     await super.create({
-      ...createDto,
-      password: await bcrypt.hash(createDto.password, await bcrypt.genSalt()),
+      ...createDTO,
+      password: await bcrypt.hash(createDTO.password, await bcrypt.genSalt()),
     });
   }
 
   @Patch(':id')
-  @ApiBody({ type: UserNoBaseModelDto })
+  @ApiBody({ type: UserNoBaseModelDTO })
   @UseGuards(AuthGuard)
   async update(
     @Param('id') id: string,
-    @Body() updateDto: UserNoBaseModel,
+    @Body() updateDTO: UserNoBaseModel,
   ): Promise<User> {
-    return await super.update(id, updateDto);
+    return await super.update(id, updateDTO);
   }
 
   @Get()

@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
-import { EmailDto } from './dto/email.dto';
+import { EmailDTO } from './DTO/email.DTO';
 import { EmailService } from './email.service';
 
 @ApiBearerAuth()
@@ -20,7 +20,7 @@ export class EmailController {
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Post()
-  async sendMailer(@Body() body: EmailDto) {
+  async sendMailer(@Body() body: EmailDTO) {
     this.emailService.sendMail(body);
   }
 }

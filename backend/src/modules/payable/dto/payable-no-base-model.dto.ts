@@ -1,8 +1,8 @@
 import { OmitType } from '@nestjs/swagger';
-import { PayableDto } from './payable.dto';
+import { PayableDTO } from './payable.DTO';
 
-export class PayableNoBaseModelDto extends OmitType(PayableDto, [
+export class PayableNoBaseModelDTO extends OmitType(PayableDTO, [
   'id',
 ] as const) {}
 
-export type PayableNoBaseModel = Omit<PayableDto, 'id'>;
+export type PayableNoBaseModel = Omit<PayableDTO, 'id'>;

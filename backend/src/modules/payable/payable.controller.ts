@@ -15,8 +15,8 @@ import { AuthGuard } from '../auth/auth.guard';
 import { CrudStrategyController } from '../crud/crud.controller';
 import {
   PayableNoBaseModel,
-  PayableNoBaseModelDto,
-} from './dto/payable-no-base-model.dto';
+  PayableNoBaseModelDTO,
+} from './DTO/payable-no-base-model.DTO';
 import { PayableService } from './payable.service';
 
 @ApiTags('Payable')
@@ -25,7 +25,6 @@ import { PayableService } from './payable.service';
 @Controller({ path: 'integrations/payable', version: '1' })
 export class PayableController extends CrudStrategyController<
   Payable,
-  PayableNoBaseModel,
   PayableNoBaseModel
 > {
   constructor(public readonly payableService: PayableService) {
@@ -34,22 +33,22 @@ export class PayableController extends CrudStrategyController<
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBody({
-    type: PayableNoBaseModelDto,
+    type: PayableNoBaseModelDTO,
   })
   @Post()
-  async create(@Body() createDto: PayableNoBaseModel): Promise<void> {
-    await this.payableService.create(createDto);
+  async create(@Body() createDTO: PayableNoBaseModel): Promise<void> {
+    await this.payableService.create(createDTO);
   }
 
   @Post('/batch')
-  @ApiBody({ type: PayableNoBaseModelDto })
+  @ApiBody({ type: PayableNoBaseModelDTO })
   @HttpCode(HttpStatus.CREATED)
   async createMany(
-    @Body() createDto: PayableNoBaseModel[],
+    @Body() createDTO: PayableNoBaseModel[],
     @Req() req: Request,
   ): Promise<Bull.Job<string | null> | string> {
-    const longProcess = createDto.length > 10;
-    this.payableService.createMany(createDto, req.user, longProcess);
+    const longProcess = createDTO.length > 10;
+    this.payableService.createMany(createDTO, req.user, longProcess);
 
     if (longProcess) return 'It will be send a email notification';
   }

@@ -2,8 +2,8 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import {
   UserNoBaseModel,
-  UserNoBaseModelDto,
-} from '../user/dto/user-no-base-model.dto';
+  UserNoBaseModelDTO,
+} from '../user/DTO/user-no-base-model.DTO';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 
@@ -13,9 +13,9 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post()
-  @ApiBody({ type: UserNoBaseModelDto })
-  signIn(@Body() signInDto: UserNoBaseModel) {
-    return this.authService.signIn(signInDto);
+  @ApiBody({ type: UserNoBaseModelDTO })
+  signIn(@Body() signInDTO: UserNoBaseModel) {
+    return this.authService.signIn(signInDTO);
   }
 
   @ApiBearerAuth()

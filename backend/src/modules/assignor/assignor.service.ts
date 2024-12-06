@@ -4,12 +4,11 @@ import { PrismaService } from 'src/config/prisma.service';
 import { CRUDServiceRepository } from '../crud/crud.service';
 import { UserService } from '../user/user.service';
 import { UserAssignorService } from './../user-payable/user-assignor.service';
-import { AssignorNoBaseModel } from './dto/assignor-no-base-model.dto';
+import { AssignorNoBaseModel } from './DTO/assignor-no-base-model.DTO';
 
 @Injectable()
 export class AssignorService extends CRUDServiceRepository<
   Assignor,
-  AssignorNoBaseModel,
   AssignorNoBaseModel
 > {
   constructor(
