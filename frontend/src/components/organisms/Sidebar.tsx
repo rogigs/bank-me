@@ -10,7 +10,7 @@ import {
 import { Logo } from "../molecules/Logo";
 
 export const Sidebar = ({ children }: Children) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);

@@ -7,7 +7,6 @@ export const Logo = () => {
       className="rounded-lg w-full h-auto"
       src={LogoStatic}
       alt="Logo da Bankme"
-      layout="responsive"
     />
   );
 };
