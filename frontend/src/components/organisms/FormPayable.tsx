@@ -1,11 +1,12 @@
-import { createPayable, findManyAssignor } from "@/services";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+"use client";
 
 import { usePayable } from "@/context/payable.context";
+import { createPayable } from "@/services";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import useSWR from "swr";
+import { z } from "zod";
 import { DialogFooter } from "../molecules/DialogFooter";
 import {
   FormField,
@@ -26,12 +27,22 @@ const schema = z.object({
   emissionDate: z.string().min(2, { message: "O campo Data é obrigatório" }),
 });
 
+import { fetcher } from "@/services/authenticatedFetch";
+import { useDeferredValue } from "react";
+
 export const FormPayable = () => {
+  // TODO: add control of error
+  const { data, error } = useSWR(
+    `http://localhost:4000/v1/integrations/assignor?take=10&page=1`,
+    fetcher
+  );
+
+  // Use deferred value for smoother updates
+  const deferredData = useDeferredValue(data?.data);
+
   const router = useRouter();
   const { setUpdate } = usePayable();
 
-  const [isPending, startTransition] = useTransition();
-  const [options, setOptions] = useState([]);
   const {
     register,
     handleSubmit,
@@ -42,15 +53,14 @@ export const FormPayable = () => {
 
   const goBack = () => router.back();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (formData: any) => {
     const res = await createPayable({
-      ...data,
-      value: parseFloat(data.value),
-      emissionDate: new Date(data.emissionDate),
+      ...formData,
+      value: parseFloat(formData.value),
+      emissionDate: new Date(formData.emissionDate),
     });
 
     if (res instanceof Error) {
-      // TODO: show error message
       return;
     }
 
@@ -58,27 +68,21 @@ export const FormPayable = () => {
     goBack();
   };
 
-  useEffect(() => {
-    const fetch = async () => {
-      const assignors = await findManyAssignor({ limit: 10, page: 1 });
-
-      setOptions(assignors);
-    };
-
-    fetch();
-  }, []);
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="p-4 w-full">
         <FormFieldSelect
           title="Cedente"
           form={{ name: "assignorId", register }}
-          options={options.map((option: any) => ({
-            key: option.id,
-            value: option.id,
-            label: option.name,
-          }))}
+          options={
+            deferredData
+              ? deferredData.map((option: any) => ({
+                  key: option.id,
+                  value: option.id,
+                  label: option.name,
+                }))
+              : [{ key: "", value: "", label: "Carregando..." }]
+          }
           error={errors}
         />
       </div>

@@ -1,7 +1,9 @@
 import { Button } from "@/components/atoms/Button";
 import { Table } from "@/components/organisms/Table";
+import { fetcher } from "@/services/authenticatedFetch";
 import { useRouter } from "next/navigation";
-import { usePayableMany } from "./hooks/usePayableMany";
+import { useDeferredValue } from "react";
+import useSWR from "swr";
 
 const header = [
   { key: "id", value: "id" },
@@ -10,9 +12,15 @@ const header = [
 ];
 
 export const Payable = () => {
-  const { deferredPayable } = usePayableMany();
+  // const { deferredPayable } = usePayableMany();
+  const swr = useSWR(
+    `http://localhost:4000/v1/integrations/assignor?take=10&page=1`,
+    fetcher
+  );
 
   const router = useRouter();
+
+  const deferredData = useDeferredValue(swr);
 
   return (
     <div>
@@ -24,7 +32,7 @@ export const Payable = () => {
       </div>
       <Table
         headerContent={header}
-        bodyContent={deferredPayable}
+        bodyContent={deferredData}
         linkToEdit="/payable"
       ></Table>
     </div>

@@ -1,23 +1,13 @@
-import { usePayable } from "@/context/payable.context";
-import { findManyPayable } from "@/services";
-import { useDeferredValue, useEffect, useState } from "react";
+import { fetcher } from "@/services/authenticatedFetch";
+import { useDeferredValue } from "react";
+import useSWR from "swr";
 
 export const usePayableMany = () => {
-  const [payable, setPayable] = useState([]);
-  const { update, setUpdate } = usePayable();
-  const deferredPayable = useDeferredValue(payable);
-
-  useEffect(() => {
-    const fetch = async () => {
-      const payable = await findManyPayable({ limit: 10, page: 1 });
-
-      setPayable(payable);
-    };
-
-    fetch();
-
-    setUpdate(false);
-  }, [update, setUpdate]);
+  const { data, error } = useSWR(
+    `http://localhost:4000/v1/integrations/assignor?take=10&page=1`,
+    fetcher
+  );
+  const deferredPayable = useDeferredValue(data);
 
   return { deferredPayable };
 };

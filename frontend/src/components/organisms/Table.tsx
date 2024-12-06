@@ -13,7 +13,8 @@ export const Table = ({ headerContent, bodyContent, linkToEdit }: any) => {
               <TableHeader content={headerContent} />
               {bodyContent && (
                 <TableBody
-                  content={bodyContent}
+                  content={bodyContent.data?.data}
+                  error={bodyContent.error}
                   keys={headerContent.map(({ key }: any) => key)}
                   link={linkToEdit}
                 />
