@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { Button } from "../atoms/Button";
 import { FormField } from "../molecules/FormField";
 
-// TODO: To media less than tablet the component has different
 export const FormLogin = () => {
   const {
     register,

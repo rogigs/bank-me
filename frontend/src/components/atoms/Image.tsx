@@ -1,4 +1,4 @@
-import ImageNext from "next/legacy/image";
+import ImageNext from "next/image";
 
 export const Image = ({ ...props }: any) => {
   return (

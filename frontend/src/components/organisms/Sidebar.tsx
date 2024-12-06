@@ -1,71 +1,37 @@
-import { useMemo } from "react";
+import { Children } from "@/types/children";
+import { useMemo, useState } from "react";
+import {
+  ArrowUturnLeftIcon,
+  BanknotesIcon,
+  Bars3Icon,
+  UsersIcon,
+  XMarkIcon,
+} from "../atoms/Icons";
 import { Logo } from "../molecules/Logo";
-import { SidebarLine } from "../molecules/SidebarLine";
 
-// TODO: Create component Icons
-// TODO: Add responsiveness
-export const Sidebar = () => {
+export const Sidebar = ({ children }: Children) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
   const lines = useMemo(
     () => [
       {
         title: "Cedentes",
-        icon: (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
-            />
-          </svg>
-        ),
+        icon: <UsersIcon />,
         link: "/assignor",
       },
       {
         title: "Pagáveis",
-        icon: (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="size-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z"
-            />
-          </svg>
-        ),
+        icon: <BanknotesIcon />,
         link: "/payable",
       },
 
       {
         title: "Log Out",
-        icon: (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
-            />
-          </svg>
-        ),
+        icon: <ArrowUturnLeftIcon />,
         link: "/logout",
       },
     ],
@@ -73,17 +39,48 @@ export const Sidebar = () => {
   );
 
   return (
-    <div className="h-screen relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700  w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
-      <div className="mb-2 p-4">
-        <Logo />
-      </div>
-      <nav className="flex flex-col gap-1 min-w-[240px] p-2 font-sans text-base font-normal text-gray-700">
-        {lines.map((line) => (
-          <SidebarLine key={line.title} title={line.title} link={line.link}>
-            {line.icon}
-          </SidebarLine>
-        ))}
-      </nav>
+    <div className="relative min-h-screen">
+      <button
+        onClick={toggleSidebar}
+        aria-label="Toggle sidebar"
+        className="fixed top-4 left-4 z-50 h-8 w-8 p-2 bg-gray-800 text-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+      >
+        {isOpen ? <XMarkIcon /> : <Bars3Icon />}
+      </button>
+
+      <aside
+        className={`fixed top-0 left-0 z-40 min-h-screen h-screen transition-transform duration-300 ease-in-out transform ${
+          isOpen ? "translate-x-0 w-full md:w-64" : "-translate-x-full w-64"
+        } bg-gray-100 text-gray-800 shadow-lg`}
+      >
+        <nav className="h-full flex flex-col py-6 px-4">
+          <div className="py-12 w-fit">
+            <Logo />
+          </div>
+          <ul className="space-y-4">
+            {lines.map((item) => (
+              <li key={item.title}>
+                <a
+                  href="#"
+                  className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors duration-200"
+                  aria-label={item.title}
+                >
+                  <span className="h-6 w-6">{item.icon}</span>
+                  <span className="text-lg">{item.title}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+
+      <main
+        className={`p-4 ${
+          isOpen ? "md:ml-64" : ""
+        } transition-margin duration-300 ease-in-out`}
+      >
+        <div className="pt-8 md:p-8 mt-4 md:ml-4">{children}</div>
+      </main>
     </div>
   );
 };
