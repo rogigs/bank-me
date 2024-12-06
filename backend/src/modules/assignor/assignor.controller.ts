@@ -1,23 +1,10 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  Param,
-  Patch,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { Controller, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Assignor } from '@prisma/client';
-import { JwtPayload } from 'src/types/jwt-payload.type';
 import { AuthGuard } from '../auth/auth.guard';
 import { CrudStrategyController } from '../crud/crud.controller';
 import { AssignorService } from './assignor.service';
-import {
-  AssignorNoBaseModel,
-  AssignorNoBaseModelDto,
-} from './dto/assignor-no-base-model.dto';
+import { AssignorNoBaseModel } from './dto/assignor-no-base-model.dto';
 
 @UseGuards(AuthGuard)
 @ApiTags('Assignor')
@@ -28,26 +15,7 @@ export class AssignorController extends CrudStrategyController<
   AssignorNoBaseModel,
   AssignorNoBaseModel
 > {
-  constructor(private readonly assignorService: AssignorService) {
+  constructor(public readonly assignorService: AssignorService) {
     super(assignorService);
-  }
-
-  @Post()
-  @ApiBody({ type: AssignorNoBaseModelDto })
-  @HttpCode(201)
-  async create(
-    @Body() createDto: AssignorNoBaseModel,
-    @Req() req?: Request & JwtPayload,
-  ): Promise<Assignor> {
-    return await this.assignorService.create(createDto, req);
-  }
-
-  @ApiBody({ type: AssignorNoBaseModelDto })
-  @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() updateDto: AssignorNoBaseModel,
-  ): Promise<Assignor> {
-    return await this.assignorService.update(id, updateDto);
   }
 }

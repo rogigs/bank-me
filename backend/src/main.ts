@@ -13,6 +13,7 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
 
+  // TODO: add logic to not appear in prod
   const config = new DocumentBuilder()
     .setTitle('Bankme')
     .setDescription('The BankeMe API description')

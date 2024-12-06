@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Payable } from '@prisma/client';
 import Bull, { Queue } from 'bull';
 import { PrismaService } from 'src/config/prisma.service';
+import { JwtPayload } from 'src/types/jwt-payload.type';
 import { CRUDServiceRepository } from '../crud/crud.service';
 import { AssignorService } from './../assignor/assignor.service';
 import { PayableNoBaseModel } from './dto/payable-no-base-model.dto';
@@ -17,7 +18,7 @@ export class PayableService extends CRUDServiceRepository<
   private result: Payable | null = null;
 
   constructor(
-    @InjectQueue('payable') private queue: Queue,
+    @InjectQueue('payable') private readonly queue: Queue,
     private readonly assignorService: AssignorService,
     prisma: PrismaService,
   ) {
@@ -32,19 +33,26 @@ export class PayableService extends CRUDServiceRepository<
     return this.result;
   }
 
-  async create(data: PayableNoBaseModel): Promise<Payable> {
+  async create(data: PayableNoBaseModel): Promise<Payable | Error> {
     await this.assignorService.findOneById(data.assignorId);
 
-    return super.create(data);
+    console.log(
+      '🚀 ~ create ~ await super.create(data):',
+      await super.create(data),
+    );
+
+    return await super.create(data);
   }
 
-  async createMany(
+  createMany(
     data: PayableNoBaseModel[],
-    user?: string,
+    user: JwtPayload,
+    longProcess: boolean,
   ): Promise<Bull.Job<string | null>> {
     return this.queue.add('createPayable', {
       data,
       user,
+      longProcess,
     });
   }
 }

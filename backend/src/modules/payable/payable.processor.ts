@@ -6,11 +6,18 @@ import {
 } from '@nestjs/bull';
 import { Payable } from '@prisma/client';
 import { Job } from 'bull';
+import { JwtPayload } from 'src/types/jwt-payload.type';
 import { EmailService } from './../email/email.service';
 import { UserService } from './../user/user.service';
 import { PayableNoBaseModel } from './dto/payable-no-base-model.dto';
 import { PayableDto } from './dto/payable.dto';
 import { PayableService } from './payable.service';
+
+type ParamsCreateMany = {
+  data: PayableNoBaseModel[];
+  user: JwtPayload;
+  longProcess: boolean;
+};
 
 @Processor('payable')
 export class PayableProcessor {
@@ -20,12 +27,10 @@ export class PayableProcessor {
     private readonly userService: UserService,
   ) {}
 
-  @Process('createPayable')
-  async handleCreatePayable(
-    job: Job<{ data: PayableNoBaseModel[]; user: string | undefined }>,
-  ) {
+  @Process({ name: 'createPayable', concurrency: 4 })
+  async handleCreatePayable(job: Job<ParamsCreateMany>) {
     try {
-      const { data, user } = job.data;
+      const { data, user, longProcess } = job.data;
 
       if (data.length > 10000) {
         throw new Error('Exceeded the maximum allowed');
@@ -35,17 +40,17 @@ export class PayableProcessor {
         await this.payableService.create(payable);
       }
 
-      if (data.length >= 10) {
-        return 'Successful';
-      }
+      if (user && longProcess) {
+        const userDB = await this.userService.findOneById(user.id);
 
-      if (user) {
-        this.emailService.sendMail({
-          to: (await this.userService.findOneById(user)).email,
-          subject: 'Pagavéis processados com successo',
-          message:
-            'Seus pagavéis foram processados com sucesso, você já pode vê-los no seu perfil.',
-        });
+        if (!(userDB instanceof Error)) {
+          this.emailService.sendMail({
+            to: userDB.email,
+            subject: 'Pagavéis processados com successo',
+            message:
+              'Seus pagavéis foram processados com sucesso, você já pode vê-los no seu perfil.',
+          });
+        }
 
         return;
       }

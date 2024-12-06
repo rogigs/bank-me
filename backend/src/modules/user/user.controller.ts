@@ -34,15 +34,15 @@ export class UserController extends CrudStrategyController<
   UserNoBaseModel,
   UserNoBaseModel
 > {
-  constructor(private readonly userService: UserService) {
+  constructor(public readonly userService: UserService) {
     super(userService);
   }
 
   @Post()
   @ApiBody({ type: UserNoBaseModelDto })
   @HttpCode(201)
-  async create(@Body() createDto: UserNoBaseModel): Promise<User> {
-    return await this.userService.create({
+  async create(@Body() createDto: UserNoBaseModel): Promise<void> {
+    await super.create({
       ...createDto,
       password: await bcrypt.hash(createDto.password, await bcrypt.genSalt()),
     });
@@ -55,7 +55,7 @@ export class UserController extends CrudStrategyController<
     @Param('id') id: string,
     @Body() updateDto: UserNoBaseModel,
   ): Promise<User> {
-    return await this.userService.update(id, updateDto);
+    return await super.update(id, updateDto);
   }
 
   @Get()
@@ -72,35 +72,14 @@ export class UserController extends CrudStrategyController<
     description: 'Quantidade de itens por página',
   })
   @UseGuards(AuthGuard)
-  async findAll(
-    @Query('page', ParseIntPipe) page = 1,
-    @Query('limit', ParseIntPipe) limit = 10,
-  ): Promise<User[]> {
-    const skip = (page - 1) * limit;
-    return await this.userService.findMany({ skip, take: limit });
-  }
-
-  @ApiQuery({
-    name: 'page',
-    required: true,
-    type: Number,
-    description: 'Número da página',
-  })
-  @ApiQuery({
-    name: 'limit',
-    required: true,
-    type: Number,
-    description: 'Quantidade de itens por página',
-  })
-  @Get()
   async findMany(
     @Query('page', ParseIntPipe) page = 1,
     @Query('limit', ParseIntPipe) limit = 10,
   ): Promise<User[]> {
-    const skip = (page - 1) * limit;
-    return await this.userService.findMany({ skip, take: limit });
+    return await super.findMany(page, limit);
   }
 
+  @UseGuards(AuthGuard)
   @ApiQuery({
     name: 'query',
     required: false,
@@ -115,14 +94,12 @@ export class UserController extends CrudStrategyController<
     @Param('id', ParseUUIDPipe) id: string,
     @Query() query: QueryParams<unknown>,
   ): Promise<User> {
-    return query
-      ? await this.userService.findOne({ id, ...query })
-      : await this.userService.findOneById(id);
+    return await super.findOne(id, query);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard)
-  async remove(@Param('id') id: string): Promise<User> {
-    return await this.userService.remove(id);
+  async remove(@Param('id') id: string): Promise<void> {
+    await super.remove(id);
   }
 }

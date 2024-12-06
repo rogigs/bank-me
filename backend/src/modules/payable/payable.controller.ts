@@ -2,8 +2,7 @@ import {
   Body,
   Controller,
   HttpCode,
-  Param,
-  Patch,
+  HttpStatus,
   Post,
   Req,
   UseGuards,
@@ -11,6 +10,7 @@ import {
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { Payable } from '@prisma/client';
 import Bull from 'bull';
+import { Request } from 'src/types/request.type';
 import { AuthGuard } from '../auth/auth.guard';
 import { CrudStrategyController } from '../crud/crud.controller';
 import {
@@ -28,41 +28,29 @@ export class PayableController extends CrudStrategyController<
   PayableNoBaseModel,
   PayableNoBaseModel
 > {
-  constructor(private readonly payableService: PayableService) {
+  constructor(public readonly payableService: PayableService) {
     super(payableService);
   }
 
-  @Post()
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBody({
     type: PayableNoBaseModelDto,
   })
-  @HttpCode(201)
-  async create(@Body() createDto: PayableNoBaseModel): Promise<Payable> {
-    return await this.payableService.create(createDto);
+  @Post()
+  async create(@Body() createDto: PayableNoBaseModel): Promise<void> {
+    await this.payableService.create(createDto);
   }
 
   @Post('/batch')
   @ApiBody({ type: PayableNoBaseModelDto })
-  @HttpCode(201)
+  @HttpCode(HttpStatus.CREATED)
   async createMany(
     @Body() createDto: PayableNoBaseModel[],
-    @Req() req,
-  ): Promise<Bull.Job<string | null>> {
-    if (createDto.length > 10) {
-      this.payableService.createMany(createDto, req.user);
+    @Req() req: Request,
+  ): Promise<Bull.Job<string | null> | string> {
+    const longProcess = createDto.length > 10;
+    this.payableService.createMany(createDto, req.user, longProcess);
 
-      return 'It will be send a email notification' as any;
-    }
-
-    return await this.payableService.createMany(createDto);
-  }
-
-  @Patch(':id')
-  @ApiBody({ type: PayableNoBaseModelDto })
-  async update(
-    @Param('id') id: string,
-    @Body() updateDto: PayableNoBaseModel,
-  ): Promise<Payable> {
-    return await this.payableService.update(id, updateDto);
+    if (longProcess) return 'It will be send a email notification';
   }
 }

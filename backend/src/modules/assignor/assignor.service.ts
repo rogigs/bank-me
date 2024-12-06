@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Assignor } from '@prisma/client';
 import { PrismaService } from 'src/config/prisma.service';
-import { JwtPayload } from 'src/types/jwt-payload.type';
 import { CRUDServiceRepository } from '../crud/crud.service';
+import { UserService } from '../user/user.service';
 import { UserAssignorService } from './../user-payable/user-assignor.service';
 import { AssignorNoBaseModel } from './dto/assignor-no-base-model.dto';
 
@@ -15,28 +15,26 @@ export class AssignorService extends CRUDServiceRepository<
   constructor(
     prisma: PrismaService,
     private readonly userAssignorService: UserAssignorService,
+    private readonly userService: UserService,
   ) {
     super(prisma, 'Assignor');
   }
 
-  async create(data: AssignorNoBaseModel): Promise<Assignor>;
-  async create(
-    data: AssignorNoBaseModel,
-    user: Request & JwtPayload,
-  ): Promise<Assignor>;
-
-  async create(
-    data: AssignorNoBaseModel,
-    user?: Request & JwtPayload,
-  ): Promise<Assignor> {
+  async create(data: AssignorNoBaseModel): Promise<Assignor | Error> {
     const assignor = await super.create(data);
 
-    if (user) {
-      await this.userAssignorService.create({
-        assignorId: assignor.id,
-        userId: user.id,
-      });
-    }
+    if (assignor instanceof Error) return assignor;
+
+    const user = await this.userService.findOne({
+      where: { email: assignor.email },
+    });
+
+    if (user instanceof Error) return user;
+
+    await this.userAssignorService.create({
+      assignorId: assignor.id,
+      userId: user.id,
+    });
 
     return assignor;
   }

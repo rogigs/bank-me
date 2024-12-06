@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { JwtPayload } from 'src/types/jwt-payload.type';
 import {
   UserNoBaseModel,
   UserNoBaseModelDto,
@@ -11,7 +10,7 @@ import { AuthService } from './auth.service';
 @ApiTags('Auth')
 @Controller({ path: '/integrations/auth', version: '1' })
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post()
   @ApiBody({ type: UserNoBaseModelDto })
@@ -22,7 +21,7 @@ export class AuthController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get('user')
-  getProfile(@Req() req) {
-    return req.user as JwtPayload;
+  getProfile(@Req() req: Request) {
+    console.log('🚀 ~ AuthController ~ getProfile ~ req:', req);
   }
 }

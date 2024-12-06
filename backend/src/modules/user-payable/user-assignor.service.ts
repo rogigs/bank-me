@@ -6,7 +6,7 @@ import { UserAssignorDto } from './dto/user-assignor.dto';
 @UseGuards(AuthGuard)
 @Injectable()
 export class UserAssignorService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(data: UserAssignorDto) {
     return await this.prisma.userAssignor.create({ data });

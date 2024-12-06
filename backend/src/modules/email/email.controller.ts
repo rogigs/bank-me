@@ -1,4 +1,11 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { EmailDto } from './dto/email.dto';
@@ -11,10 +18,9 @@ import { EmailService } from './email.service';
 export class EmailController {
   constructor(private readonly emailService: EmailService) {}
 
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Post()
   async sendMailer(@Body() body: EmailDto) {
     this.emailService.sendMail(body);
-
-    return 'Sucesso';
   }
 }
