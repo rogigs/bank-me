@@ -18,7 +18,7 @@ import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { QueryParams } from 'src/types/query-params.type';
 import { AuthGuard } from '../auth/auth.guard';
-import { CrudStrategyController } from '../crud/crud.controller';
+import { AbstractCrudController } from '../crud/crud.controller';
 import {
   UserNoBaseModel,
   UserNoBaseModelDTO,
@@ -29,7 +29,7 @@ import { UserService } from './user.service';
 @ApiTags('User')
 @Controller({ path: 'user', version: '1' })
 @UseInterceptors(UserInterceptor)
-export class UserController extends CrudStrategyController<
+export class UserController extends AbstractCrudController<
   User,
   UserNoBaseModel
 > {

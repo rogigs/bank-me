@@ -5,7 +5,7 @@ import { QueryParams } from 'src/types/query-params.type';
 import { CRUDRepository } from './crud.interface';
 
 @Injectable()
-export abstract class CRUDServiceRepository<T, C>
+export abstract class AbstractCrudService<T, C>
   implements CRUDRepository<T, C>
 {
   constructor(

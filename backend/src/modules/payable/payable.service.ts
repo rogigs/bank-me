@@ -4,13 +4,13 @@ import { Payable } from '@prisma/client';
 import Bull, { Queue } from 'bull';
 import { PrismaService } from 'src/config/prisma.service';
 import { JwtPayload } from 'src/types/jwt-payload.type';
-import { CRUDServiceRepository } from '../crud/crud.service';
+import { AbstractCrudService } from '../crud/crud.service';
 import { AssignorService } from './../assignor/assignor.service';
 import { PayableNoBaseModel } from './DTO/payable-no-base-model.DTO';
 import { PayableDTO } from './DTO/payable.DTO';
 
 @Injectable()
-export class PayableService extends CRUDServiceRepository<
+export class PayableService extends AbstractCrudService<
   Payable,
   PayableNoBaseModel
 > {

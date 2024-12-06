@@ -1,17 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CRUDServiceRepository } from './crud.service';
+import { AbstractCrudService } from './crud.service';
 
 describe('CRUDService', () => {
-  let service: CRUDServiceRepository<any, any, any>;
+  let service: AbstractCrudService<any, any, any>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [CRUDServiceRepository],
+      providers: [AbstractCrudService],
     }).compile();
 
-    service = module.get<CRUDServiceRepository<any, any, any>>(
-      CRUDServiceRepository,
-    );
+    service =
+      module.get<AbstractCrudService<any, any, any>>(AbstractCrudService);
   });
 
   it('should be defined', () => {

@@ -9,7 +9,7 @@ import {
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { Assignor } from '@prisma/client';
 import { AuthGuard } from '../auth/auth.guard';
-import { CrudStrategyController } from '../crud/crud.controller';
+import { AbstractCrudController } from '../crud/crud.controller';
 import { AssignorService } from './assignor.service';
 import {
   AssignorNoBaseModel,
@@ -20,7 +20,7 @@ import {
 @ApiTags('Assignor')
 @ApiBearerAuth()
 @Controller({ path: 'integrations/assignor', version: '1' })
-export class AssignorController extends CrudStrategyController<
+export class AssignorController extends AbstractCrudController<
   Assignor,
   AssignorNoBaseModel
 > {

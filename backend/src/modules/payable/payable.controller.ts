@@ -12,7 +12,7 @@ import { Payable } from '@prisma/client';
 import Bull from 'bull';
 import { Request } from 'src/types/request.type';
 import { AuthGuard } from '../auth/auth.guard';
-import { CrudStrategyController } from '../crud/crud.controller';
+import { AbstractCrudController } from '../crud/crud.controller';
 import {
   PayableNoBaseModel,
   PayableNoBaseModelDTO,
@@ -23,7 +23,7 @@ import { PayableService } from './payable.service';
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 @Controller({ path: 'integrations/payable', version: '1' })
-export class PayableController extends CrudStrategyController<
+export class PayableController extends AbstractCrudController<
   Payable,
   PayableNoBaseModel
 > {
@@ -31,6 +31,7 @@ export class PayableController extends CrudStrategyController<
     super(payableService);
   }
 
+  // TODO: AbstractCrudController should receive PayableNoBaseModelDTO
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBody({
     type: PayableNoBaseModelDTO,

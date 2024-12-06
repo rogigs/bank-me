@@ -16,13 +16,13 @@ import { ApiQuery } from '@nestjs/swagger';
 import { PositiveNumberPipeFactory } from 'src/pipes/PositiveNumberPipe.pipe';
 import { QueryParams } from 'src/types/query-params.type';
 import { CRUDController } from './crud.interface';
-import { CRUDServiceRepository } from './crud.service';
+import { AbstractCrudService } from './crud.service';
 
 @Controller()
-export abstract class CrudStrategyController<T, C>
+export abstract class AbstractCrudController<T, C>
   implements CRUDController<T, C>
 {
-  constructor(private readonly baseCrudService: CRUDServiceRepository<T, C>) {}
+  constructor(private readonly baseCrudService: AbstractCrudService<T, C>) {}
 
   public validateResult(result: T | T[] | Error | null): T | T[] {
     if (result instanceof Error) {
