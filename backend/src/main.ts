@@ -2,18 +2,17 @@ import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors();
-
   app.useGlobalPipes(new ValidationPipe());
 
   app.enableVersioning({
     type: VersioningType.URI,
   });
 
-  // TODO: add logic to not appear in prod
   const config = new DocumentBuilder()
     .setTitle('Bankme')
     .setDescription('The BankeMe API description')
@@ -32,6 +31,6 @@ async function bootstrap() {
 
   await app.listen(4000);
 
-  console.log('\x1b[36m%s\x1b[0m', 'App is listening in port 4000 🏃🏃🏃🏃🏃');
+  console.log('\x1b[36m%s\x1b[0m', 'App is listening on port 4000 🏃🏃🏃🏃🏃');
 }
 bootstrap();

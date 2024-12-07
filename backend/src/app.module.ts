@@ -4,6 +4,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { ResponseInterceptor } from './app.interceptors';
 import { AppService } from './app.service';
+import { PrismaModule } from './config/prisma.module';
 import { AssignorModule } from './modules/assignor/assignor.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { EmailModule } from './modules/email/email.module';
@@ -23,6 +24,7 @@ import { UserModule } from './modules/user/user.module';
     AuthModule,
     UserModule,
     EmailModule,
+    PrismaModule,
   ],
   controllers: [AppController],
   providers: [
