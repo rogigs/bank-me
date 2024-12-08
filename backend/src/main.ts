@@ -6,19 +6,22 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // TODO: add correct rules
   app.enableCors();
+
   app.useGlobalPipes(new ValidationPipe());
 
   app.enableVersioning({
     type: VersioningType.URI,
   });
 
+  // TODO: show rule to appear just in DEV: SEC
   const config = new DocumentBuilder()
     .setTitle('Bankme')
     .setDescription('The BankeMe API description')
     .setVersion('1.0')
     .addBearerAuth({
-      description: `[just text field] Please enter token in following format: Bearer <JWT>`,
+      description: `Please enter token in following format: Bearer <JWT>`,
       name: 'Authorization',
       bearerFormat: 'Bearer',
       scheme: 'Bearer',
