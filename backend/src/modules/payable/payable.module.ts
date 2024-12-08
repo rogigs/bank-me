@@ -1,8 +1,8 @@
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { AssignorModule } from '../assignor/assignor.module';
-import { EmailService } from '../email/email.service';
-import { UserService } from './../user/user.service';
+import { EmailModule } from '../email/email.module';
+import { UserModule } from '../user/user.module';
 import { PayableController } from './payable.controller';
 import { PayableProcessor } from './payable.processor';
 import { PayableService } from './payable.service';
@@ -12,8 +12,10 @@ import { PayableService } from './payable.service';
       name: 'payable',
     }),
     AssignorModule,
+    UserModule,
+    EmailModule,
   ],
   controllers: [PayableController],
-  providers: [EmailService, PayableService, UserService, PayableProcessor],
+  providers: [PayableService, PayableProcessor],
 })
 export class PayableModule {}

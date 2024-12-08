@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { UserAssignorModule } from '../user-payable/user-assignor.module';
-import { UserService } from '../user/user.service';
+import { UserModule } from '../user/user.module';
 import { AssignorController } from './assignor.controller';
 import { AssignorService } from './assignor.service';
 
 @Module({
-  imports: [UserAssignorModule],
+  imports: [UserAssignorModule, UserModule],
   controllers: [AssignorController],
-  providers: [AssignorService, UserService],
+  providers: [AssignorService],
   exports: [AssignorService],
 })
 export class AssignorModule {}
