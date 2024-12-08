@@ -3,6 +3,8 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
+  Param,
+  Patch,
   Post,
   Req,
   Res,
@@ -36,14 +38,30 @@ export class PayableController extends AbstractCrudController<
     super(payableService);
   }
 
-  // TODO: AbstractCrudController should receive PayableNoBaseModelDTO
+  // TODO: resolve @ApiBody to show generic types
+  // Generics are a compile-time concept, meaning they are resolved during the compilation
+  // of TypeScript code and do not exist natively at runtime.
+  // Swagger, on the other hand, operates with the description of APIs at runtime and does
+  // not have direct access to generic type information. It does not understand how generic
+  // types should be translated into the OpenAPI specification (which is the standard for Swagger).
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBody({
     type: PayableNoBaseModelDTO,
   })
   @Post()
-  async create(@Body() createDTO: PayableNoBaseModel): Promise<void> {
+  async create(@Body() createDTO: PayableNoBaseModelDTO): Promise<void> {
     await this.payableService.create(createDTO);
+  }
+
+  @ApiBody({
+    type: PayableNoBaseModelDTO,
+  })
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() updateDTO: PayableNoBaseModelDTO,
+  ): Promise<Payable> {
+    return super.update(id, updateDTO);
   }
 
   // Revert that just to test what is faster to validated a CSV

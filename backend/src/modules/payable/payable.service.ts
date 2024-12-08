@@ -35,11 +35,6 @@ export class PayableService extends AbstractCrudService<
   async create(data: PayableNoBaseModel): Promise<Payable | Error> {
     await this.assignorService.findOneById(data.assignorId);
 
-    console.log(
-      '🚀 ~ create ~ await super.create(data):',
-      await super.create(data),
-    );
-
     return await super.create(data);
   }
 
