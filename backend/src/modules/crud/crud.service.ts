@@ -2,12 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { Pagination } from 'src/types/pagination.type';
 import { QueryParams } from 'src/types/query-params.type';
-import { CRUDRepository } from './crud.interface';
+import { CRUDService } from './crud.interface';
 
 @Injectable()
-export abstract class AbstractCrudService<T, C>
-  implements CRUDRepository<T, C>
-{
+export abstract class AbstractCrudService<T, C> implements CRUDService<T, C> {
   constructor(
     private readonly prisma: PrismaClient,
     private readonly model: Prisma.ModelName,

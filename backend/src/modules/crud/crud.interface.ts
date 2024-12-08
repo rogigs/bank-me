@@ -1,7 +1,7 @@
 import { Pagination } from 'src/types/pagination.type';
 import { QueryParams } from 'src/types/query-params.type';
 
-export interface CRUDRepository<T, C> {
+export interface CRUDService<T, C> {
   create(data: C): Promise<T | Error>;
   findMany(params: Pagination): Promise<T[] | Error>;
   findOne(query: QueryParams<unknown>): Promise<T | null | Error>;

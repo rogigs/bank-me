@@ -13,7 +13,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
-import { PositiveNumberPipeFactory } from 'src/pipes/PositiveNumberPipe.pipe';
+import { PositiveNumberPipe } from 'src/pipes/PositiveNumberPipe.pipe';
 import { QueryParams } from 'src/types/query-params.type';
 import { CRUDController } from './crud.interface';
 import { AbstractCrudService } from './crud.service';
@@ -59,8 +59,8 @@ export abstract class AbstractCrudController<T, C>
     description: 'Quantidade de itens por página',
   })
   async findMany(
-    @Query('page', PositiveNumberPipeFactory('Page')) page = 1,
-    @Query('take', PositiveNumberPipeFactory('Take')) take = 10,
+    @Query('page', PositiveNumberPipe) page = 1,
+    @Query('take', PositiveNumberPipe) take = 10,
   ): Promise<T[]> {
     const pagination = { skip: (page - 1) * take, take };
 
