@@ -11,6 +11,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { EmailModule } from './modules/email/email.module';
 import { PayableModule } from './modules/payable/payable.module';
 import { UserModule } from './modules/user/user.module';
+import { PositiveNumberPipe } from './pipes/PositiveNumberPipe.pipe';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { UserModule } from './modules/user/user.module';
   controllers: [AppController],
   providers: [
     AppService,
+    PositiveNumberPipe,
     {
       provide: APP_INTERCEPTOR,
       useClass: ResponseInterceptor,
