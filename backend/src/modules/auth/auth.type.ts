@@ -1,3 +1,3 @@
 export type AuthResponse = {
-  access_token: string;
+  accessToken: string;
 };
