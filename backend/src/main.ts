@@ -8,7 +8,7 @@ async function bootstrap() {
 
   // TODO: add correct rules
   app.enableCors();
-
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
 
   app.enableVersioning({
@@ -18,19 +18,16 @@ async function bootstrap() {
   // TODO: show rule to appear just in DEV: SEC
   const config = new DocumentBuilder()
     .setTitle('Bankme')
-    .setDescription('The BankeMe API description')
+    .setDescription('The BankMe API description')
     .setVersion('1.0')
-    .addBearerAuth({
-      description: `Please enter token in following format: Bearer <JWT>`,
-      name: 'Authorization',
-      bearerFormat: 'Bearer',
-      scheme: 'Bearer',
-      type: 'http',
-      in: 'Header',
-    })
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/v1', app, document);
+
+  SwaggerModule.setup('swagger', app, document, {
+    jsonDocumentUrl: 'swagger/json',
+    swaggerOptions: { persistAuthorization: true },
+  });
 
   await app.listen(4000);
 
