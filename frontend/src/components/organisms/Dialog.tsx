@@ -18,7 +18,7 @@ export const Dialog = ({
       id="default-modal"
       tabIndex={-1}
       aria-hidden="true"
-      className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75"
+      className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50"
     >
       <div className="relative p-4 w-full max-w-2xl max-h-full">
         <div className="relative bg-white rounded-lg shadow">
