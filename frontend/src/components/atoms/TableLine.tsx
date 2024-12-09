@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "./Link";
 
 type TableLine = {
   edit?: boolean;
@@ -9,6 +9,12 @@ type TableLine = {
   exclude?: boolean;
 };
 
+type ContentItem = {
+  key: string;
+  value: string | number;
+};
+
+// TODO: simplify implementation
 export const TableLine = ({
   edit,
   content,
@@ -17,6 +23,7 @@ export const TableLine = ({
   showMore,
   exclude,
 }: TableLine) => {
+  const { id } = content;
   return (
     <tr {...(edit && { className: "hover:bg-success" })}>
       {keys
@@ -28,7 +35,7 @@ export const TableLine = ({
               {content[key]}
             </td>
           ))
-        : content.map(({ key, value }: any) => (
+        : content.map(({ key, value }: ContentItem) => (
             <td
               key={key}
               className="py-4 px-6 text-sm font-medium text-primary-dark whitespace-nowrap"
@@ -36,28 +43,10 @@ export const TableLine = ({
               {value}
             </td>
           ))}
-      <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap space-x-4 ">
-        {edit && (
-          <Link href={link + "/edit?id=" + content.id}>
-            <span className="text-primary-dark hover:underline hover:text-primary hover:font-bold">
-              Editar
-            </span>
-          </Link>
-        )}
-        {showMore && (
-          <Link href={link + "/show-more?id=" + content.id}>
-            <span className="text-primary-dark hover:underline hover:text-primary hover:font-bold">
-              Ver Mais
-            </span>
-          </Link>
-        )}
-        {exclude && (
-          <Link href={link + "/delete?id=" + content.id}>
-            <span className="text-primary-dark hover:underline hover:text-red-500 hover:font-bold">
-              Excluir
-            </span>
-          </Link>
-        )}
+      <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap space-x-4">
+        {edit && <Link href={`${link}/edit/${id}`} label="Editar" />}
+        {showMore && <Link href={`${link}/show-more/${id}`} label="Ver Mais" />}
+        {exclude && <Link href={`${link}/delete/${id}`} label="Excluir" />}
       </td>
     </tr>
   );

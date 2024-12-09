@@ -5,8 +5,8 @@ type Table = {};
 
 export const Table = ({ headerContent, bodyContent, linkToEdit }: any) => {
   return (
-    <div className="flex flex-col ">
-      <div className="overflow-x-auto shadow-md sm:rounded-lg">
+    <section className="flex flex-col ">
+      <article className="overflow-x-auto shadow-md sm:rounded-lg">
         <div className="inline-block min-w-full align-middle">
           <div className="overflow-hidden">
             <table className="min-w-full rounded-lg divide-y divide-primary-dark table-fixed">
@@ -22,7 +22,7 @@ export const Table = ({ headerContent, bodyContent, linkToEdit }: any) => {
             </table>
           </div>
         </div>
-      </div>
-    </div>
+      </article>
+    </section>
   );
 };

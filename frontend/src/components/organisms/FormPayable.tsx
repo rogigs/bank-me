@@ -1,11 +1,9 @@
 "use client";
 
 import { usePayable } from "@/context/payable.context";
-import { createPayable } from "@/services";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import useSWR from "swr";
 import { z } from "zod";
 import { DialogFooter } from "../molecules/DialogFooter";
 import {
@@ -13,6 +11,9 @@ import {
   FormFieldDate,
   FormFieldSelect,
 } from "../molecules/FormField";
+
+import { usePayableControllerCreate } from "@/services";
+import { useDeferredValue } from "react";
 
 type Inputs = {
   assignorId: string;
@@ -27,15 +28,8 @@ const schema = z.object({
   emissionDate: z.string().min(2, { message: "O campo Data é obrigatório" }),
 });
 
-import { fetcher } from "@/services/authenticatedFetch";
-import { useDeferredValue } from "react";
-
 export const FormPayable = () => {
-  // TODO: add control of error
-  const { data, error } = useSWR(
-    `http://localhost:4000/v1/integrations/assignor?take=10&page=1`,
-    fetcher
-  );
+  const { data, error } = usePayableControllerCreate();
 
   // Use deferred value for smoother updates
   const deferredData = useDeferredValue(data?.data);

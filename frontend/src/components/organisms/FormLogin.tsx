@@ -1,6 +1,7 @@
 "use client";
 
-import { authenticate } from "@/services";
+import { LOCAL_STORAGE_KEYS } from "@/constants/localStorage";
+import { authControllerSignIn } from "@/services";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button } from "../atoms/Button";
@@ -14,15 +15,19 @@ export const FormLogin = () => {
   } = useForm();
   const router = useRouter();
 
-  const onSubmit = async (data: any) => {
-    const authenticated = await authenticate(data);
-    if (authenticated instanceof Error) {
-      return;
+  const onSubmit = async (form: any) => {
+    try {
+      const { data } = await authControllerSignIn(form);
+
+      // TODO: fix that in orval
+      localStorage.setItem(
+        LOCAL_STORAGE_KEYS.TOKEN,
+        (data as any).data?.accessToken
+      );
+      router.push("/payable");
+    } catch (error) {
+      console.log("🚀 ~ onSubmit ~ error:", error);
     }
-
-    localStorage.setItem("token", authenticated.access_token);
-
-    router.push("/payable");
   };
 
   return (
@@ -36,9 +41,9 @@ export const FormLogin = () => {
       </h1>
 
       <FormField
-        title="Login"
+        title="Email"
         placeholder="Digite seu login..."
-        form={{ name: "login", register }}
+        form={{ name: "email", register }}
         error={errors}
       />
       <FormField

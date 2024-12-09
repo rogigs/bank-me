@@ -1,11 +1,13 @@
-import { findManyAssignor, findOnePayable, updatePayable } from "@/services";
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { ROUTE_PARAMS } from "@/constants/routeParams";
 import { usePayable } from "@/context/payable.context";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { DialogFooter } from "../molecules/DialogFooter";
 import {
   FormField,
@@ -27,10 +29,10 @@ const schema = z.object({
 });
 
 export const FormPayableEdit = () => {
+  const { id } = useParams<{ [ROUTE_PARAMS.ID]: string }>();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { setUpdate } = usePayable();
-  const id = searchParams.get("id") as string;
   const [isPending, startTransition] = useTransition();
   const [options, setOptions] = useState([]);
   const {
@@ -45,42 +47,9 @@ export const FormPayableEdit = () => {
   const goBack = () => router.back();
 
   const onSubmit = async (data: any) => {
-    const res = await updatePayable(
-      {
-        ...data,
-        value: parseFloat(data.value),
-        emissionDate: new Date(data.emissionDate),
-      },
-      id
-    );
-
-    if (res instanceof Error) {
-      // TODO: show error message
-
-      return;
-    }
-
     setUpdate(true);
     goBack();
   };
-
-  useEffect(() => {
-    const fetch = async () => {
-      const [payable, assignors] = await Promise.all([
-        findOnePayable(id),
-        findManyAssignor({ limit: 10, page: 1 }),
-      ]);
-
-      // TODO: convert to correct types
-      Object.entries(payable).forEach(([key, value]) => {
-        setValue(key as any, String(value));
-      });
-
-      setOptions(assignors);
-    };
-
-    fetch();
-  }, [searchParams, setValue, id]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

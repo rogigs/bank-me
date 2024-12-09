@@ -1,42 +1,35 @@
-import { Field, FieldDate, FieldSelect } from "../atoms/Field";
-
-type FormField = {
-  title: string;
-};
+import { Field, FieldSelect } from "../atoms/Field";
+import { FormFieldError } from "../atoms/FieldError";
+import { FieldLabel } from "../atoms/FieldLabel";
 
 export const FormField = ({ title, form, error, ...props }: any) => {
   return (
-    <div className="w-full">
-      <label className="text-lg font-semibold" htmlFor={form.name}>
-        {title}
-      </label>
-      <Field form={form} aria-describedby={`${form.name}-error`} {...props} />
-      {error[form.name] && (
-        <span role="alert" className=" text-red-500">
-          {error[form.name].message}
-        </span>
-      )}
-    </div>
-  );
-};
-
-export const FormFieldDate = ({ title, form, error, ...props }: any) => {
-  return (
-    <div className="w-full">
-      <label className="text-lg font-semibold" htmlFor={form.name}>
-        {title}
-      </label>
-      <FieldDate
+    <fieldset className="w-full">
+      <FieldLabel title={title} htmlFor={form.name} />
+      <Field
+        type="text"
         form={form}
         aria-describedby={`${form.name}-error`}
         {...props}
       />
-      {error[form.name] && (
-        <span role="alert" className=" text-red-500">
-          {error[form.name].message}
-        </span>
-      )}
-    </div>
+      <FormFieldError message={error[form.name]?.message} />
+    </fieldset>
+  );
+};
+
+// TODO: dont needed that component
+export const FormFieldDate = ({ title, form, error, ...props }: any) => {
+  return (
+    <fieldset className="w-full">
+      <FieldLabel title={title} htmlFor={form.name} />
+      <Field
+        type="date"
+        form={form}
+        aria-describedby={`${form.name}-error`}
+        {...props}
+      />
+      <FormFieldError message={error[form.name]?.message} />
+    </fieldset>
   );
 };
 
@@ -48,21 +41,15 @@ export const FormFieldSelect = ({
   ...props
 }: any) => {
   return (
-    <div className="w-full">
-      <label className="text-lg font-semibold" htmlFor={form.name}>
-        {title}
-      </label>
+    <fieldset className="w-full">
+      <FieldLabel title={title} htmlFor={form.name} />
       <FieldSelect
         form={form}
         options={options}
         aria-describedby={`${form.name}-error`}
         {...props}
       />
-      {error[form.name] && (
-        <span role="alert" className=" text-red-500">
-          {error[form.name].message}
-        </span>
-      )}
-    </div>
+      <FormFieldError message={error[form.name]?.message} />
+    </fieldset>
   );
 };

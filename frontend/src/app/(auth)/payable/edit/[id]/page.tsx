@@ -1,5 +1,3 @@
-"use client";
-
 import { FormPayableEdit } from "@/components/organisms/FormPayableEdit";
 
 const PayableEdit = () => {

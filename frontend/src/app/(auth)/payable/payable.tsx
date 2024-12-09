@@ -1,9 +1,9 @@
 import { Button } from "@/components/atoms/Button";
 import { Table } from "@/components/organisms/Table";
-import { fetcher } from "@/services/authenticatedFetch";
+import { usePayableControllerFindMany } from "@/services";
+import { fetchHeadersWithAuthorization } from "@/services/header";
 import { useRouter } from "next/navigation";
 import { useDeferredValue } from "react";
-import useSWR from "swr";
 
 const header = [
   { key: "id", value: "id" },
@@ -12,15 +12,24 @@ const header = [
 ];
 
 export const Payable = () => {
-  // const { deferredPayable } = usePayableMany();
-  const swr = useSWR(
-    `http://localhost:4000/v1/integrations/assignor?take=10&page=1`,
-    fetcher
+  const { data, error } = usePayableControllerFindMany(
+    { take: 10, page: 1 },
+    {
+      fetch: fetchHeadersWithAuthorization(),
+    }
   );
 
   const router = useRouter();
 
-  const deferredData = useDeferredValue(swr);
+  const deferredData = useDeferredValue(data);
+
+  if (error) {
+    return <p>Error</p>;
+  }
+
+  if (!data) {
+    return <p>Carregando...</p>;
+  }
 
   return (
     <div>
@@ -28,7 +37,9 @@ export const Payable = () => {
         <Button onClick={() => router.push("/payable/register")}>
           Criar Pagavéis
         </Button>
-        <Button> Importar pagavéis</Button>
+        <Button onClick={() => router.push("/payable/register/multiples")}>
+          Importar pagavéis
+        </Button>
       </div>
       <Table
         headerContent={header}
