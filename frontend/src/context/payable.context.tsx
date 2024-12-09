@@ -1,3 +1,5 @@
+"use client";
+
 import { Children } from "@/types/children";
 import React, { createContext, useContext, useState } from "react";
 

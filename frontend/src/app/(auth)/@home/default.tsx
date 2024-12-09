@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/atoms/Button";
 import { Table } from "@/components/organisms/Table";
 import { usePayableControllerFindMany } from "@/services";
@@ -11,7 +13,7 @@ const header = [
   { key: "emissionDate", value: "Dt. de Emissão" },
 ];
 
-export const Payable = () => {
+const PayablePage = () => {
   const { data, error } = usePayableControllerFindMany(
     { take: 10, page: 1 },
     {
@@ -49,3 +51,5 @@ export const Payable = () => {
     </div>
   );
 };
+
+export default PayablePage;

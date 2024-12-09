@@ -1,12 +1,19 @@
 "use client";
 
+import { Dialog } from "@/components/organisms/Dialog";
 import { Sidebar } from "@/components/organisms/Sidebar";
 import { useAuthControllerGetProfile } from "@/services";
-import { Children } from "@/types/children";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-const DashboardLayout = ({ children }: Children) => {
+const DashboardLayout = ({
+  children,
+  home,
+}: {
+  children: React.ReactNode;
+  home: React.ReactNode;
+}) => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const { data, error } = useAuthControllerGetProfile({
     swr: {
@@ -20,11 +27,24 @@ const DashboardLayout = ({ children }: Children) => {
     return <p>Error layout</p>;
   }
 
-  if (!data) {
-    return <p>Carregando layout...</p>;
-  }
+  const isPayableRoot = pathname === "/payable";
 
-  return <Sidebar>{children}</Sidebar>;
+  return (
+    <Sidebar>
+      {!isPayableRoot && (
+        <Dialog
+          label="Criar pagavéis"
+          title="Pagavéis"
+          confirm="Cadastrar"
+          cancel="Cancelar"
+          dialogForm
+        >
+          {children}
+        </Dialog>
+      )}
+      {home}
+    </Sidebar>
+  );
 };
 
 export default DashboardLayout;

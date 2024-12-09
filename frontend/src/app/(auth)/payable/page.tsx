@@ -1,5 +1,5 @@
-const PayablePage = () => {
+const PayableEdit = () => {
   return <></>;
 };
 
-export default PayablePage;
+export default PayableEdit;
