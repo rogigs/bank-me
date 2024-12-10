@@ -14,9 +14,7 @@ export const PayableProvider = ({ children }: Children) => {
   const [update, setUpdate] = useState<boolean>(false);
 
   return (
-    <PayableContext.Provider value={{ update, setUpdate }}>
-      {children}
-    </PayableContext.Provider>
+    <PayableContext value={{ update, setUpdate }}>{children}</PayableContext>
   );
 };
 
