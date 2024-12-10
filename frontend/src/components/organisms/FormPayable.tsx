@@ -12,27 +12,45 @@ import {
   FormFieldSelect,
 } from "../molecules/FormField";
 
-import { usePayableControllerCreate } from "@/services";
-import { useDeferredValue } from "react";
+import {
+  payableControllerCreate,
+  useAssignorControllerFindMany,
+} from "@/services";
+import {
+  fetchHeadersWithAuthorization,
+  headersWithAuthorization,
+} from "@/services/header";
+import { useTransition } from "react";
 
-type Inputs = {
-  assignorId: string;
-  value: string;
-  emissionDate: string;
-};
-
-// TODO: fix validations value and emissionDate
 const schema = z.object({
   assignorId: z.string().min(2, { message: "O campo Cedente é obrigatório" }),
-  value: z.string().min(2, { message: "O campo Valor é obrigatório" }),
-  emissionDate: z.string().min(2, { message: "O campo Data é obrigatório" }),
+  value: z
+    .string()
+    .min(1, { message: "O campo Valor é obrigatório" })
+    .transform((val) => parseFloat(val)),
+  emissionDate: z
+    .string()
+    .min(2, { message: "O campo Data é obrigatório" })
+    .transform((val) => new Date(val).toISOString()),
 });
 
-export const FormPayable = () => {
-  const { data, error } = usePayableControllerCreate();
+type SchemaInputs = z.infer<typeof schema>;
 
-  // Use deferred value for smoother updates
-  const deferredData = useDeferredValue(data?.data);
+type Option = {
+  id: string;
+  name: string;
+};
+
+export const FormPayable = () => {
+  const { data, error } = useAssignorControllerFindMany(
+    { take: 10, page: 1 },
+    {
+      fetch: fetchHeadersWithAuthorization(),
+    }
+  );
+  const [isPending, startTransition] = useTransition();
+
+  const deferredData = (data as any)?.data.data;
 
   const router = useRouter();
   const { setUpdate } = usePayable();
@@ -41,26 +59,26 @@ export const FormPayable = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<SchemaInputs>({
     resolver: zodResolver(schema),
   });
 
   const goBack = () => router.back();
 
-  const onSubmit = async (formData: any) => {
-    const res = await createPayable({
-      ...formData,
-      value: parseFloat(formData.value),
-      emissionDate: new Date(formData.emissionDate),
+  const onSubmit = (formData: SchemaInputs) => {
+    startTransition(async () => {
+      try {
+        await payableControllerCreate(formData, headersWithAuthorization());
+
+        setUpdate(true);
+        goBack();
+      } catch (error) {
+        console.error(error);
+      }
     });
-
-    if (res instanceof Error) {
-      return;
-    }
-
-    setUpdate(true);
-    goBack();
   };
+
+  const hasOptions = deferredData && !error;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -69,11 +87,11 @@ export const FormPayable = () => {
           title="Cedente"
           form={{ name: "assignorId", register }}
           options={
-            deferredData
-              ? deferredData.map((option: any) => ({
-                  key: option.id,
-                  value: option.id,
-                  label: option.name,
+            hasOptions
+              ? deferredData.map(({ id, name }: Option) => ({
+                  key: id,
+                  value: id,
+                  label: name,
                 }))
               : [{ key: "", value: "", label: "Carregando..." }]
           }
@@ -92,7 +110,14 @@ export const FormPayable = () => {
           error={errors}
         />
       </div>
-      <DialogFooter type="submit" goBack={goBack} />
+
+      {/* // TODO: refactor that component */}
+      <DialogFooter
+        type="submit"
+        label="Cadastrar"
+        disabled={isPending}
+        goBack={goBack}
+      />
     </form>
   );
 };

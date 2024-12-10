@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/atoms/Button";
 import { Table } from "@/components/organisms/Table";
-import { usePayableControllerFindMany } from "@/services";
+import { useAssignorControllerFindMany } from "@/services";
 import { fetchHeadersWithAuthorization } from "@/services/header";
 import { useRouter } from "next/navigation";
 import { useDeferredValue } from "react";
@@ -14,7 +14,7 @@ const header = [
 ];
 
 const PayablePage = () => {
-  const { data, error } = usePayableControllerFindMany(
+  const { data, error } = useAssignorControllerFindMany(
     { take: 10, page: 1 },
     {
       fetch: fetchHeadersWithAuthorization(),
