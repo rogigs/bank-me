@@ -67,16 +67,16 @@ export const Sidebar = ({ children }: Children) => {
           isOpen ? "translate-x-0 w-full md:w-64" : "-translate-x-full w-64"
         } bg-gray-100 text-gray-800 shadow-lg`}
       >
-        <nav className="h-full flex flex-col py-6 px-4">
-          <div className="py-12 w-fit">
+        <nav className="h-full flex flex-col">
+          <div className="py-16 px-4 w-fit">
             <Logo />
           </div>
           <ul className="space-y-4">
             {lines.map((item) => (
-              <li key={item.title}>
+              <li key={item.title} className="hover:bg-gray-200 ">
                 <a
                   href="#"
-                  className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors duration-200"
+                  className="flex px-4  items-center space-x-3 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors duration-200"
                   aria-label={item.title}
                 >
                   <span className="h-6 w-6">{item.icon}</span>
