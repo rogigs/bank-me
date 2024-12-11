@@ -1,5 +1,5 @@
 import { Children } from "@/types/children";
-import { useMemo, useState } from "react";
+import { useLayoutEffect, useMemo, useState } from "react";
 import {
   ArrowUturnLeftIcon,
   BanknotesIcon,
@@ -10,7 +10,21 @@ import {
 import { Logo } from "../molecules/Logo";
 
 export const Sidebar = ({ children }: Children) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    const handleResize = () => {
+      setIsOpen(window.innerWidth >= 1024);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
