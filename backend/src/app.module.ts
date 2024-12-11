@@ -1,9 +1,8 @@
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
-import { ResponseInterceptor } from './app.interceptors';
 import { AppService } from './app.service';
 import { PrismaModule } from './config/prisma.module';
 import { AssignorModule } from './modules/assignor/assignor.module';
@@ -39,10 +38,6 @@ import { PositiveNumberPipe } from './pipes/PositiveNumberPipe.pipe';
   providers: [
     AppService,
     PositiveNumberPipe,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: ResponseInterceptor,
-    },
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,

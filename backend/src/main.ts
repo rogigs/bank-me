@@ -15,7 +15,7 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
 
-  // TODO: show rule to appear just in DEV: SEC
+  // TODO: show rule to appear just in DEV: Security Problem
   const config = new DocumentBuilder()
     .setTitle('Bankme')
     .setDescription('The BankMe API description')

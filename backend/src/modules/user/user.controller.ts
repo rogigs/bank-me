@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   ParseUUIDPipe,
@@ -39,9 +40,9 @@ export class UserController extends AbstractCrudController<
 
   @Post()
   @ApiBody({ type: UserNoBaseModelDTO })
-  @HttpCode(201)
-  async create(@Body() createDTO: UserNoBaseModel): Promise<void> {
-    await super.create({
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() createDTO: UserNoBaseModel): Promise<User> {
+    return await super.create({
       ...createDTO,
       password: await bcrypt.hash(createDTO.password, await bcrypt.genSalt()),
     });

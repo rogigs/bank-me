@@ -1,5 +1,5 @@
 "use server";
-import { schema } from "@/schemas/schemaFormLogin";
+import { schema } from "@/schemas/schemaFormPayable";
 
 export type FormState = {
   message: string;
@@ -13,7 +13,6 @@ export async function onSubmitAction(
 ): Promise<FormState> {
   const formData = Object.fromEntries(data);
   const parsed = schema.safeParse(formData);
-  console.log("🚀 ~ parsed:", parsed);
 
   if (!parsed.success) {
     const fields: Record<string, string> = {};

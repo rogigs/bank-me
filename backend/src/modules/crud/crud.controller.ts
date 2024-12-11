@@ -38,11 +38,11 @@ export abstract class AbstractCrudController<T, C>
     return result;
   }
 
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.CREATED)
   @Post()
-  async create(@Body() createDTO: C): Promise<void> {
+  async create(@Body() createDTO: C): Promise<T> {
     const result = await this.baseCrudService.create(createDTO);
-    this.validateResult(result);
+    return this.validateResult(result) as T;
   }
 
   @Get()
@@ -80,7 +80,7 @@ export abstract class AbstractCrudController<T, C>
   @Get(':id')
   async findOne(
     @Param('id') id: string,
-    @Query() query: QueryParams<unknown>,
+    @Query() query?: QueryParams<unknown>,
   ): Promise<T> {
     const result = query
       ? await this.baseCrudService.findOneById(id)

@@ -1,6 +1,3 @@
-"use client";
-
-import { useSearchParams } from "next/navigation";
 import { TableBody } from "../molecules/TableBody";
 import { TableFooter } from "../molecules/TableFooter";
 import { TableHeader } from "../molecules/TableHeader";
@@ -11,6 +8,7 @@ type Table = {
   linkToEdit: string;
   error: Error | null;
   bodyContent: Record<string, any>[];
+  currentPage: number;
 };
 
 export const Table = ({
@@ -19,12 +17,8 @@ export const Table = ({
   error,
   linkToEdit,
   actions,
+  currentPage,
 }: Table) => {
-  const searchParams = useSearchParams();
-
-  const pageFromQuery = parseInt(searchParams.get("page") ?? "1", 10);
-  const currentPage = !isNaN(pageFromQuery) ? pageFromQuery : 1;
-
   return (
     <section className="flex flex-col">
       <article className="overflow-x-auto shadow-md sm:rounded-lg">

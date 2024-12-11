@@ -17,22 +17,6 @@ export const FormField = ({ title, form, error, ...props }: any) => {
   );
 };
 
-// TODO: dont needed that component
-export const FormFieldDate = ({ title, form, error, ...props }: any) => {
-  return (
-    <fieldset className="w-full">
-      <FieldLabel title={title} htmlFor={form.name} />
-      <Field
-        type="date"
-        form={form}
-        aria-describedby={`${form.name}-error`}
-        {...props}
-      />
-      <FormFieldError message={error[form.name]?.message} />
-    </fieldset>
-  );
-};
-
 export const FormFieldSelect = ({
   title,
   form,

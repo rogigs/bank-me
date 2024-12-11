@@ -44,13 +44,14 @@ export class PayableController extends AbstractCrudController<
   // Swagger, on the other hand, operates with the description of APIs at runtime and does
   // not have direct access to generic type information. It does not understand how generic
   // types should be translated into the OpenAPI specification (which is the standard for Swagger).
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.CREATED)
   @ApiBody({
     type: PayableNoBaseModelDTO,
   })
   @Post()
-  async create(@Body() createDTO: PayableNoBaseModelDTO): Promise<void> {
-    await this.payableService.create(createDTO);
+  async create(@Body() createDTO: PayableNoBaseModelDTO): Promise<Payable> {
+    const result = await this.payableService.create(createDTO);
+    return super.validateResult(result) as Payable;
   }
 
   @ApiBody({

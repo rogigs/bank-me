@@ -30,13 +30,14 @@ export class AssignorController extends AbstractCrudController<
     super(assignorService);
   }
 
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.CREATED)
   @ApiBody({
     type: AssignorNoBaseModelDTO,
   })
   @Post()
-  async create(@Body() createDTO: AssignorNoBaseModel): Promise<void> {
-    await this.assignorService.create(createDTO);
+  async create(@Body() createDTO: AssignorNoBaseModel): Promise<Assignor> {
+    const result = await this.assignorService.create(createDTO);
+    return super.validateResult(result) as Assignor;
   }
 
   // TODO: resolve @ApiBody to show generic types

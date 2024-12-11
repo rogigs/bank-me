@@ -3,16 +3,18 @@
 import { Button } from "@/components/atoms/Button";
 import { HeaderPage } from "@/components/atoms/HeaderPage";
 import { Table } from "@/components/organisms/Table";
+import { SESSION_STORAGE_KEYS } from "@/constants/sessionStorage";
 import {
   assignorControllerFindMany,
-  useAssignorControllerFindMany,
+  getPayableControllerCreateMutationKey,
+  usePayableControllerFindMany,
 } from "@/services";
 import {
   fetchHeadersWithAuthorization,
   headersWithAuthorization,
 } from "@/services/header";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useDeferredValue } from "react";
+import { useDeferredValue, useEffect } from "react";
 import { preload } from "swr";
 
 const headers = ["Id", "Nome", "Documento", "Email", "Telefone"];
@@ -20,13 +22,33 @@ const headers = ["Id", "Nome", "Documento", "Email", "Telefone"];
 const PayablePage = () => {
   const searchParams = useSearchParams();
 
-  const pageFromQuery = parseInt(searchParams.get("page") ?? "1", 10);
-  const takeFromQuery = parseInt(searchParams.get("take") ?? "10", 10);
+  const savedParams = JSON.parse(
+    sessionStorage.getItem(SESSION_STORAGE_KEYS.PAYABLE) ?? "{}"
+  ) as {
+    page?: number;
+    take?: number;
+  };
+
+  const pageFromQuery = parseInt(
+    searchParams.get("page") ?? `${savedParams.page}`,
+    10
+  );
+  const takeFromQuery = parseInt(
+    searchParams.get("take") ?? `${savedParams.take}`,
+    10
+  );
 
   const currentPage = !isNaN(pageFromQuery) ? pageFromQuery : 1;
   const currentTake = !isNaN(takeFromQuery) ? takeFromQuery : 10;
 
-  const { data, error } = useAssignorControllerFindMany(
+  useEffect(() => {
+    sessionStorage.setItem(
+      SESSION_STORAGE_KEYS.PAYABLE,
+      JSON.stringify({ page: currentPage, take: currentTake })
+    );
+  }, [currentPage, currentTake]);
+
+  const { data, error } = usePayableControllerFindMany(
     {
       take: currentTake,
       page: currentPage,
@@ -37,7 +59,7 @@ const PayablePage = () => {
   ) as any;
 
   preload(
-    `http://localhost:4000/api/v1/integrations/assignor?take=${currentTake}&page=${
+    `${getPayableControllerCreateMutationKey()}?take=${currentTake}&page=${
       currentPage + 1
     }`,
     () =>
@@ -70,6 +92,7 @@ const PayablePage = () => {
         bodyContent={deferredData}
         error={error}
         linkToEdit="/payable"
+        currentPage={currentPage}
         actions
       ></Table>
     </>

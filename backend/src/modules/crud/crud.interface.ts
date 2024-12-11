@@ -11,7 +11,7 @@ export interface CRUDService<T, C> {
 }
 
 export interface CRUDController<T, C> {
-  create(data: C): Promise<void>;
+  create(data: C): Promise<T>;
   findMany(page: number, limit: number): Promise<T[]>;
   findOne(id: string, query: QueryParams<unknown>): Promise<T>;
   update(id: string, data: C): Promise<T>;
