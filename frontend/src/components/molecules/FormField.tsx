@@ -12,7 +12,7 @@ export const FormField = ({ title, form, error, ...props }: any) => {
         aria-describedby={`${form.name}-error`}
         {...props}
       />
-      <FormFieldError message={error[form.name]?.message} />
+      <FormFieldError message={error} />
     </fieldset>
   );
 };

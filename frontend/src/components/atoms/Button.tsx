@@ -1,4 +1,7 @@
+"use client";
+
 import React, { ButtonHTMLAttributes, forwardRef } from "react";
+import { useFormStatus } from "react-dom";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
@@ -20,12 +23,15 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       return "bg-primary text-white font-semibold hover:text-success hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 disabled:bg-slate-50";
     })();
 
+    const { pending } = useFormStatus();
+
     return (
       <button
         ref={ref}
         type={type}
         className={`w-full h-16 rounded-xl py-2 px-4 ${buttonClassNameType}`}
         onClick={onClick}
+        disabled={pending}
       >
         {children}
       </button>
