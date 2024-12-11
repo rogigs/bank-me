@@ -1,7 +1,5 @@
-import ImageNext from "next/image";
+import ImageNext, { ImageProps } from "next/image";
 
-export const Image = ({ ...props }: any) => {
-  return (
-    <ImageNext alt={props.alt} loading="lazy" priority={false} {...props} />
-  );
+export const Image = ({ ...props }: ImageProps) => {
+  return <ImageNext loading="lazy" {...props} />;
 };
