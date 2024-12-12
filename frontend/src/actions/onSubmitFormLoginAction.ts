@@ -1,10 +1,11 @@
 "use server";
-import { schema } from "@/schemas/schemaFormLogin";
+import { schema, SchemaInputs } from "@/schemas/schemaFormLogin";
 
 export type FormState = {
   message: string;
   fields?: Record<string, string>;
   issues?: Record<string, string>;
+  data?: SchemaInputs;
 };
 
 export async function onSubmitAction(
@@ -13,7 +14,6 @@ export async function onSubmitAction(
 ): Promise<FormState> {
   const formData = Object.fromEntries(data);
   const parsed = schema.safeParse(formData);
-  console.log("🚀 ~ parsed:", parsed);
 
   if (!parsed.success) {
     const fields: Record<string, string> = {};
@@ -43,5 +43,5 @@ export async function onSubmitAction(
     };
   }
 
-  return { message: "Valid form data" };
+  return { message: "Valid form data", data: parsed.data };
 }

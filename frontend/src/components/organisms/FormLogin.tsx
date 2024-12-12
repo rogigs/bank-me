@@ -1,10 +1,7 @@
 "use client";
 
 import { onSubmitAction } from "@/actions/onSubmitFormLoginAction";
-import { LOCAL_STORAGE_KEYS } from "@/constants/localStorage";
 import { fields, SchemaInputs } from "@/schemas/schemaFormLogin";
-import { authControllerSignIn } from "@/services";
-import { UserNoBaseModelDTO } from "@/services/index.schemas";
 import { useRouter } from "next/navigation";
 import { startTransition, useActionState, useEffect, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -23,34 +20,27 @@ export const FormLogin = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (state.message == "Valid form data") {
+    if (state?.data) {
       (async () => {
         try {
-          const formData = new FormData(formRef.current!);
-          const formObject: Record<string, any> = {};
-          formData.forEach((value, key) => {
-            formObject[key] = value;
+          const response = await fetch("/api/signin", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(state.data),
           });
 
-          const { data } = (await authControllerSignIn(
-            formObject as unknown as UserNoBaseModelDTO
-          )) as any;
-          console.log("🚀 ~ data:", data);
-
-          // TODO: fix data void in orval
-          if (data?.accessToken) {
-            localStorage.setItem(
-              LOCAL_STORAGE_KEYS.TOKEN,
-              (data as any)?.accessToken
-            );
+          if (response.ok) {
             router.push("/payable?take=10&page=1");
+            return;
           }
+          const errorData = await response.json();
+          console.error("Error response:", errorData);
         } catch (error) {
-          console.log("🚀 ~ onSubmit ~ error:", error);
+          console.error("Error during authentication:", error);
         }
       })();
     }
-  }, [state, router]);
+  }, [state?.data, router]);
 
   return (
     <FormProvider {...form}>
