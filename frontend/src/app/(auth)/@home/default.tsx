@@ -5,14 +5,15 @@ import { HeaderPage } from "@/components/atoms/HeaderPage";
 import { Table } from "@/components/organisms/Table";
 import { SESSION_STORAGE_KEYS } from "@/constants/sessionStorage";
 import {
-  assignorControllerFindMany,
   getPayableControllerCreateMutationKey,
+  payableControllerFindMany,
   usePayableControllerFindMany,
 } from "@/services";
 import {
   fetchHeadersWithAuthorization,
   headersWithAuthorization,
 } from "@/services/header";
+import { GetServerSidePropsContext } from "next";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDeferredValue, useEffect } from "react";
 import { preload } from "swr";
@@ -55,6 +56,11 @@ const PayablePage = () => {
     },
     {
       fetch: fetchHeadersWithAuthorization(),
+      swr: {
+        dedupingInterval: 120000,
+        revalidateOnFocus: false,
+        revalidateIfStale: false,
+      },
     }
   ) as any;
 
@@ -63,7 +69,7 @@ const PayablePage = () => {
       currentPage + 1
     }`,
     () =>
-      assignorControllerFindMany(
+      payableControllerFindMany(
         {
           take: currentTake,
           page: currentPage,
@@ -100,3 +106,14 @@ const PayablePage = () => {
 };
 
 export default PayablePage;
+
+export async function getServerSideProps({ res }: GetServerSidePropsContext) {
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=120, stale-while-revalidate=59"
+  );
+
+  return {
+    props: {},
+  };
+}
