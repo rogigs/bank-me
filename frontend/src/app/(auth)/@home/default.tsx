@@ -73,7 +73,7 @@ const PayablePage = () => {
       payableControllerFindMany(
         {
           take: currentTake,
-          page: currentPage,
+          page: currentPage + 1,
         },
         headersWithAuthorization()
       )
