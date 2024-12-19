@@ -49,6 +49,7 @@ const PayablePage = () => {
     );
   }, [currentPage, currentTake]);
 
+  // TODO: pass that page to a intercept route  is the best approach
   const { data, error } = usePayableControllerFindMany(
     {
       take: currentTake,
