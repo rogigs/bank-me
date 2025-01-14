@@ -5,7 +5,7 @@ export const IntroductionLogin = () => {
   return (
     <aside className="bg-primary-dark text-white rounded-3xl w-full h-full flex flex-col justify-between md:w-1/2">
       <section 
-        aria-label="Platform logo" 
+        aria-label="Logo da plataforma" 
         className="flex justify-center items-center w-full h-full p-12 bg-success rounded-3xl"
       >
         <div role="banner" className="w-full h-full">
