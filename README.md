@@ -1,78 +1,97 @@
-# BankMe
+# Project Title
 
-**Isso não é um monorepo!**, Para rodar as aplicações juntas, utilize o Docker Compose:
+A brief description of what this project does and who it's for
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
 
 ```bash
-docker-compose -f "docker-compose.yml" up -d --build
+ DATABASE_URL=path-to-db
 ```
 
-Os dois projetos estão no mesmo repositório para facilitar o encontro deles. Além disso, toda a documentação necessária para instalar e inicilizar o projeto estará disponível no README.md de cada projeto.
+## Installation
 
-# Processo de desenvolvimento
+Install project with npm
 
-- Leitura dos requisitos
-- [Brainstorm da Solução](#Brainstorm-da-solução)
-- Organização das tarefas
-- [Decisão das tecnologias a serem utilizadas](#Tecnologias-utilizadas)
+```bash
+  cd frontend // or cd backend
+  npm install 
+```
+    
+## Tech Stack
 
-# Tecnologias utilizadas
+**Client:** React, NextJS, SWR, React-hook-form, Zod e TailwindCSS
 
-### Backend
-
-Tecnologias utilizadas:
-
-- NestJs
-  - Obrigatório;
-- SQLite
-  - Obrigatório;
-- Prisma
-  - Obrigatório;
-- JWT
-  - Obrigatório;
-- Docker e Docker Compose
-  - Obrigatório;
-- Bull
-  - Decidir utilizar ela pois tenho mais familiridade e é recomendada pela documentação
-- Swagger
-  - Documenta a aplicação e ainda permite realizar testes no endpoint
-
-Decisões de arquitetura:
-
-- Arquitetura em camadas
-
-### Frontend
-
-Tecnologias utilizadas e suas motivações:
-
-- React e NextJS
-  - Possuo mais familiridade com estes framework/biblioteca, por consequência meu desenvolvimento demora menos tempo(o que estou tendo pouco no momento);
-- React-hook-form
-  - Esta biblioteca permite que eu construa componentes controlavéis com facilidade;
-- Zod
-  - Permite que eu desenvolva validações no meu formulário e é compatível com Typescript;
-- Tailwind
-  - Decidir por não utilizar Design System, por exemplo o Material UI, por meu protótipo apresentar componentes simples;
-
-Decisões de arquitetura:
+**Server:** Node, NestJS, Prisma, SQLite, Bull, Redis e Swagger
 
 
-- NextJS
-  - SSR e Router
-- Atomic Design
+## Lessons Learned
 
-# Brainstorm da solução
+- Acessibility
+    - ARIA
+    - Manual tests
+    - Patterns
 
-### Backend
+Reference: https://web.dev/learn/accessibility
 
-- Desenho do Database
-![Screenshot 2024-06-02 213350](https://github.com/rogigs/bank-me/assets/49894949/2be7ce4f-3997-4157-ac14-ec3571e3af5a)
+- New features NextJS
+    - Parallel Routes
+    - Server actions
+    - Intercept routes
+    - Layout
+    - Partial Prerendering
+    - Pre fetch routes
+
+Reference: https://nextjs.org/
+
+- SWR
+    - SWR devTools
+    - Stale-While-Revalidate
+
+Reference: https://swr.vercel.app/
+
+- Techniques
+    - Chunk
+    - Streams
+
+Reference: https://www.youtube.com/watch?v=-IpRYbL4yMk&pp=ygUUZXJpY2sgd2VuZGVsIHN0cmVhbXM%3D
 
 
-### Frontend
-- Desenho da UI 
-- Entendimento do retorno da API
-- Definição das rotas
-- Design System -> as cores são baseadas no site da Bank Me
-![image](https://github.com/rogigs/bank-me/assets/49894949/e9ea691c-2b79-4402-916d-7bd28e038d1d)
+## Documentation
 
+[Documentation](https://github.com/rogigs/bank-me/wiki) _- Hire have more about brainstorm, performance, acessibility, architecture and tests._
+
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone git@github.com:rogigs/bank-me.git
+```
+
+Go to the project directory
+
+```bash
+  cd frontend // or cd backend
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Run project
+
+```bash
+  npm run dev // or npm run start 
+```
+
+Run docker
+
+```bash
+  docker-compose -f "docker-compose.yml" up -d --build
+```
 
