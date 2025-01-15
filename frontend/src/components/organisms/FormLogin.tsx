@@ -47,7 +47,7 @@ export const FormLogin = () => {
       <form
         ref={formRef}
         action={formAction}
-        className="flex flex-col gap-12 h-full w-full md:w-1/2"
+        className="flex flex-col gap-12"
         onSubmit={(evt) => {
           evt.preventDefault();
           form.handleSubmit(() => {
@@ -57,16 +57,13 @@ export const FormLogin = () => {
           })(evt);
         }}
       >
-        <h1 className="text-6xl text-end break-words">
-          <span className="font-bold text-primary">Bankme</span> o seu banco
-          preferido!
-        </h1>
-
         <FormField
           title="Email"
-          placeholder="Digite seu login..."
+          placeholder="Digite seu email..."
           form={{ name: fields.email, register: form.register }}
           error={state.issues?.email}
+          autoComplete="email"
+          required
         />
         <FormField
           title="Senha"
@@ -74,14 +71,10 @@ export const FormLogin = () => {
           placeholder="Digite sua senha..."
           form={{ name: fields.password, register: form.register }}
           error={state.issues?.password}
+          required
         />
-
         <div className="flex flex-col gap-y-4 justify-between md:flex-row md:items-center ">
-          <a
-            href="#"
-            className="text-2xl text-primary-dark underline"
-            aria-label="Esqueceu sua senha? Clique para recuperar."
-          >
+          <a href="#" className="text-2xl text-primary-dark underline">
             Esqueceu sua senha?
           </a>
           <div className="w-full md:w-1/3">
