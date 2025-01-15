@@ -18,52 +18,7 @@ Install project with npm
   cd frontend // or cd backend
   npm install 
 ```
-    
-## Tech Stack
-
-**Client:** React, NextJS, SWR, React-hook-form, Zod e TailwindCSS
-
-**Server:** Node, NestJS, Prisma, SQLite, Bull, Redis e Swagger
-
-
-## Lessons Learned
-
-- Acessibility
-    - ARIA
-    - Manual tests
-    - Patterns
-
-Reference: https://web.dev/learn/accessibility
-
-- New features NextJS
-    - Parallel Routes
-    - Server actions
-    - Intercept routes
-    - Layout
-    - Partial Prerendering
-    - Pre fetch routes
-
-Reference: https://nextjs.org/
-
-- SWR
-    - SWR devTools
-    - Stale-While-Revalidate
-
-Reference: https://swr.vercel.app/
-
-- Techniques
-    - Chunk
-    - Streams
-
-Reference: https://www.youtube.com/watch?v=-IpRYbL4yMk&pp=ygUUZXJpY2sgd2VuZGVsIHN0cmVhbXM%3D
-
-
-## Documentation
-
-[Documentation](https://github.com/rogigs/bank-me/wiki) _- Hire have more about brainstorm, performance, acessibility, architecture and tests._
-
-
-## Run Locally
+ ## Run Locally
 
 Clone the project
 
@@ -94,4 +49,52 @@ Run docker
 ```bash
   docker-compose -f "docker-compose.yml" up -d --build
 ```
+
+  
+## Documentation
+
+[Documentation](https://github.com/rogigs/bank-me/wiki) _- Hire have more about brainstorm, performance, acessibility, architecture and tests._
+
+## Tech Stack
+
+**Client:** React, NextJS, SWR, React-hook-form, Zod e TailwindCSS
+
+**Server:** Node, NestJS, Prisma, SQLite, Bull, Redis e Swagger
+
+
+## Lessons Learned
+
+- Acessibility
+    - ARIA
+    - Manual tests
+    - Patterns
+
+_Reference:_ https://web.dev/learn/accessibility
+
+- New features NextJS
+    - Parallel Routes
+    - Server actions
+    - Intercept routes
+    - Layout
+    - Partial Prerendering
+    - Pre fetch routes
+
+_Reference:_ https://nextjs.org/
+
+- SWR
+    - SWR devTools
+    - Stale-While-Revalidate
+
+_Reference:_ https://swr.vercel.app/
+
+- Techniques
+    - Chunk
+    - Streams
+
+_Reference:_ https://www.youtube.com/watch?v=-IpRYbL4yMk&pp=ygUUZXJpY2sgd2VuZGVsIHN0cmVhbXM%3D
+
+
+
+
+
 
